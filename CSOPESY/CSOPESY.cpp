@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 void printHeader() {
@@ -21,17 +22,39 @@ void printHeader() {
 int main()
 {
     printHeader();
-    cout << "Enter a command: \n";
+
+    while (true) {
+        cout << "Enter a command: ";
+
+        string command;
+        cin >> command;
+        
+        if(command == "initialize"){
+            cout << "Initialize command recognized. Doing something.\n";
+        }
+        else if(command == "screen") {
+            cout << "Screen command recognized. Doing something.\n";
+        }
+        else if(command ==  "scheduler-test"){
+            cout << "scheduler-test command recognized. Doing something.\n";
+        }
+        else if(command ==  "scheduler-stop"){
+            cout << "scheduler-stop command recognized. Doing something.\n";
+        }
+        else if(command ==  "report-util"){
+            cout << "Report-util command recognized. Doing something.\n";
+        }
+        else if(command ==  "clear"){
+            cout << "\033[2J\033[1;1H";
+        }
+        else if(command ==  "exit"){
+            cout << "Exiting...\n";
+            break;
+        }
+        else {
+            cout << command + " command not recognized.";
+        }
+    }
+
     return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
