@@ -2,7 +2,8 @@
 //
 
 #include <iostream>
-#include <cstdlib>
+#include <string>
+#define WINDOWS
 using namespace std;
 
 void printHeader() {
@@ -19,6 +20,14 @@ void printHeader() {
     cout << "\033[0m";
 }
 
+void clearScreen() {
+#ifdef WINDOWS
+    system("cls");  // Clear screen on Windows
+#else
+    system("clear"); // Clear screen on Linux/Unix/Mac
+#endif
+}
+
 int main()
 {
     printHeader();
@@ -27,7 +36,7 @@ int main()
         cout << "Enter a command: ";
 
         string command;
-        cin >> command;
+        getline(cin, command);
         
         if(command == "initialize"){
             cout << "Initialize command recognized. Doing something.\n";
@@ -45,14 +54,15 @@ int main()
             cout << "Report-util command recognized. Doing something.\n";
         }
         else if(command ==  "clear"){
-            cout << "\033[2J\033[1;1H";
+            clearScreen();
+            printHeader();
         }
         else if(command ==  "exit"){
             cout << "Exiting...\n";
             break;
         }
         else {
-            cout << command + " command not recognized.";
+            cout << command + " command not recognized." << '\n';
         }
     }
 
