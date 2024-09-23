@@ -3,6 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include "Process.h"
+#include "ProcessHandler.h"
+#include "Screen.h"
+#include "ScreenHandler.h"
+
 #define WINDOWS
 using namespace std;
 
@@ -31,6 +36,9 @@ void clearScreen() {
 int main()
 {
     printHeader();
+    // Initialize process handler and screen handler
+    ProcessHandler processHandler = ProcessHandler();
+    ScreenHandler screenHandler = ScreenHandler(processHandler);
 
     while (true) {
         cout << "Enter a command: ";
@@ -42,7 +50,10 @@ int main()
             cout << "Initialize command recognized. Doing something.\n";
         }
         else if(command == "screen") {
-            cout << "Screen command recognized. Doing something.\n";
+            // Create a new process. Sample usage of screen only!
+            clearScreen();
+            string processName = processHandler.createProcess("process_01", 10);
+            screenHandler.createScreen(processName);
         }
         else if(command ==  "scheduler-test"){
             cout << "scheduler-test command recognized. Doing something.\n";
