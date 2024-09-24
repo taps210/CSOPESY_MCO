@@ -9,18 +9,12 @@
 #include "ScreenHandler.h"
 #include "ConsoleManager.h"
 
-#define WINDOWS
 using namespace std;
 
 int main()
 {
     ConsoleManager console = ConsoleManager();
-    
-
-    while (true) {
-       
-        console.runCommand();
-    }
+    console.runCommand();
 
     return 0;
 }

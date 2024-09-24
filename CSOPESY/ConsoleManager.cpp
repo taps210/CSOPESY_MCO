@@ -1,6 +1,7 @@
 #include "ConsoleManager.h"
 #include "ScreenHandler.h"
 #include "ProcessHandler.h"
+#define WINDOWS
 
 void printHeader() {
     cout << "  CCCC   SSSSS    OOOO    PPPPP    EEEEE   SSSSS   Y   Y\n";
@@ -24,45 +25,50 @@ void clearScreen() {
 #endif
 }
 
+ConsoleManager::ConsoleManager()
+{
+}
+
 void ConsoleManager::runCommand() {
-
     printHeader();
-    // Initialize process handler and screen handler
-    ProcessHandler processHandler = ProcessHandler();
-    ScreenHandler screenHandler = ScreenHandler(processHandler);
+    while (true) {
+        // Initialize process handler and screen handler
+        ProcessHandler processHandler = ProcessHandler();
+        ScreenHandler screenHandler = ScreenHandler(processHandler);
 
-    cout << "Enter a command: ";
+        cout << "Enter a command: ";
 
-    string command;
-    getline(cin, command);
+        string command;
+        getline(cin, command);
 
-    if (command == "initialize") {
-        cout << "Initialize command recognized. Doing something.\n";
-    }
-    else if (command == "screen") {
-        // Create a new process. Sample usage of screen only!
-        clearScreen();
-        string processName = processHandler.createProcess("process_01", 10);
-        screenHandler.createScreen(processName);
-    }
-    else if (command == "scheduler-test") {
-        cout << "scheduler-test command recognized. Doing something.\n";
-    }
-    else if (command == "scheduler-stop") {
-        cout << "scheduler-stop command recognized. Doing something.\n";
-    }
-    else if (command == "report-util") {
-        cout << "Report-util command recognized. Doing something.\n";
-    }
-    else if (command == "clear") {
-        clearScreen();
-        printHeader();
-    }
-    else if (command == "exit") {
-        cout << "Exiting...\n";
-    }
-    else {
-        cout << command + " command not recognized." << '\n';
+        if (command == "initialize") {
+            cout << "Initialize command recognized. Doing something.\n";
+        }
+        else if (command == "screen") {
+            // Create a new process. Sample usage of screen only!
+            clearScreen();
+            string processName = processHandler.createProcess("process_01", 10);
+            screenHandler.createScreen(processName);
+        }
+        else if (command == "scheduler-test") {
+            cout << "scheduler-test command recognized. Doing something.\n";
+        }
+        else if (command == "scheduler-stop") {
+            cout << "scheduler-stop command recognized. Doing something.\n";
+        }
+        else if (command == "report-util") {
+            cout << "Report-util command recognized. Doing something.\n";
+        }
+        else if (command == "clear") {
+            clearScreen();
+            printHeader();
+        }
+        else if (command == "exit") {
+            cout << "Exiting...\n";
+        }
+        else {
+            cout << command + " command not recognized." << '\n';
+        }      
     }
 }
 
