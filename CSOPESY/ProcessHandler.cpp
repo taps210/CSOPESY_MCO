@@ -19,3 +19,12 @@ Process* ProcessHandler::getProcess(const string& name) {
     }
     return nullptr;
 }
+
+bool ProcessHandler::checkProcessExists(const string& processName) {
+    if (processes.find(processName) != processes.end()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}

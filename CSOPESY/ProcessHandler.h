@@ -14,4 +14,5 @@ public:
     // Declaration of methods
     string createProcess(const string& name, int totalLines);
     Process* getProcess(const string& name);
+    bool checkProcessExists(const string& processName);
 };

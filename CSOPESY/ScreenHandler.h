@@ -11,7 +11,7 @@ class ScreenHandler
 private:
     ProcessHandler& processHandler;
     map<string, Screen> screens;
-    string activeScreen;
+    int lastAssignedId = 0;
 
 public:
     // Constructor
@@ -20,6 +20,7 @@ public:
     // Create screen for a process and add to screens map
     void createScreen(const string& processName);
 
-    // Clear active screen
-    void exitScreen();
+    void getScreen(const string& processName);
+
+    bool checkScreenExists(const string& processName);
 };

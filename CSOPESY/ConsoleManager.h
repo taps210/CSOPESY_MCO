@@ -7,6 +7,7 @@ class ConsoleManager
 
 private: 
 	string command;
+	string mode = "menu";
 
 public:
 	ConsoleManager();
