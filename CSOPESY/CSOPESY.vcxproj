@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="CSOPESY.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="ProcessHandler.cpp" />
@@ -134,6 +136,7 @@
     <ClCompile Include="ScreenHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="ProcessHandler.h" />
     <ClInclude Include="Screen.h" />
