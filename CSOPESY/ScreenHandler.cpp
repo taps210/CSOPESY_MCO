@@ -1,4 +1,5 @@
 #include "ScreenHandler.h"
+#include <chrono>
 
 // Constructor
 ScreenHandler::ScreenHandler(ProcessHandler& ph) : processHandler(ph) {}
@@ -7,7 +8,19 @@ ScreenHandler::ScreenHandler(ProcessHandler& ph) : processHandler(ph) {}
 void ScreenHandler::createScreen(const string& processName) {
     Process* process = processHandler.getProcess(processName);
     if (process) {
-        string creationTime = "CURRENT TIME"; // TODO: Replace with actual time
+        // Get current time
+        auto now = chrono::system_clock::now();
+        std::time_t now_time = chrono::system_clock::to_time_t(now);
+        std::tm local_tm;
+        #ifdef _WIN32
+            localtime_s(&local_tm, &now_time);
+        #else
+            (&now_time, &local_tm);
+        #endif
+        std::ostringstream oss;
+        oss << std::put_time(&local_tm, "%m/%d/%Y, %I:%M:%S %p");
+
+        string creationTime = oss.str();
         Screen newScreen(processName, process, creationTime);
         screens[processName] = newScreen;
         newScreen.drawScreen();
