@@ -93,6 +93,7 @@ void ConsoleManager::runCommand() {
             }
             else if (args[0] == "exit") {
                 cout << "Exiting...\n";
+                break;
             }
             else {
                 cout << args[0] + " command not recognized." << '\n';
