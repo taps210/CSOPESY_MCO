@@ -128,19 +128,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AConsole.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="CSOPESY.cpp" />
+    <ClCompile Include="MainConsole.cpp" />
     <ClCompile Include="Process.cpp" />
-    <ClCompile Include="ProcessHandler.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="ScreenHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AConsole.h" />
     <ClInclude Include="ConsoleManager.h" />
+    <ClInclude Include="MainConsole.h" />
     <ClInclude Include="Process.h" />
-    <ClInclude Include="ProcessHandler.h" />
     <ClInclude Include="Screen.h" />
-    <ClInclude Include="ScreenHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

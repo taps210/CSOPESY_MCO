@@ -4,17 +4,20 @@
 #include <iostream>
 #include <string>
 #include "Process.h"
-#include "ProcessHandler.h"
 #include "Screen.h"
-#include "ScreenHandler.h"
 #include "ConsoleManager.h"
-
-using namespace std;
 
 int main()
 {
-    ConsoleManager console = ConsoleManager();
-    console.runCommand();
+    ConsoleManager::initialize();
+   
+    bool running = true;
+
+    while (running) {
+        ConsoleManager::getInstance()->drawConsole();
+        ConsoleManager::getInstance()->process();
+        running = ConsoleManager::getInstance()->isRunning();
+    }
 
     return 0;
 }

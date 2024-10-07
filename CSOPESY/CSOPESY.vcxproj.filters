@@ -13,36 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ConsoleUI">
+      <UniqueIdentifier>{f2deab38-2062-4758-884e-0c1fe1de3f4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process">
+      <UniqueIdentifier>{27fca006-c6e1-4232-a4cf-e2d839745fdb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSOPESY.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Process.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ConsoleManager.cpp">
+      <Filter>ConsoleUI</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessHandler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AConsole.cpp">
+      <Filter>ConsoleUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MainConsole.cpp">
+      <Filter>ConsoleUI</Filter>
     </ClCompile>
     <ClCompile Include="Screen.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>ConsoleUI</Filter>
     </ClCompile>
-    <ClCompile Include="ScreenHandler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Process.cpp">
+      <Filter>Process</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Process.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ConsoleManager.h">
+      <Filter>ConsoleUI</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessHandler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AConsole.h">
+      <Filter>ConsoleUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MainConsole.h">
+      <Filter>ConsoleUI</Filter>
     </ClInclude>
     <ClInclude Include="Screen.h">
-      <Filter>Header Files</Filter>
+      <Filter>ConsoleUI</Filter>
     </ClInclude>
-    <ClInclude Include="ScreenHandler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Process.h">
+      <Filter>Process</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,12 +7,21 @@ using namespace std;
 
 class ProcessHandler
 {
-private:
-    map<string, Process> processes;
-
 public:
-    // Declaration of methods
-    string createProcess(const string& name, int totalLines);
-    Process* getProcess(const string& name);
+    static ProcessHandler* getInstance();
+    static void initialize();
+    static void destroy();
+
+    static string createProcess(const string& name, int totalLines);
+    static Process* getProcess(const string& name);
     bool checkProcessExists(const string& processName);
+
+private:
+    ProcessHandler();
+    ~ProcessHandler() = default;
+    ProcessHandler(ProcessHandler const&) {}
+    ProcessHandler& operator=(ProcessHandler const&) {}
+    static ProcessHandler* sharedInstance;
+
+    map<string, Process> processes;
 };

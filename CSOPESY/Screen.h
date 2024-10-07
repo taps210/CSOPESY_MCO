@@ -1,23 +1,21 @@
 #pragma once
-#include "Process.h"
 #include <string>
 #include <iostream>
-using namespace std;
 
-class Screen
+#include "Process.h"
+#include "AConsole.h"
+
+class Screen : public AConsole
 {
-private:
-    string id;
-    Process* process;
-    string timeCreated;
-
 public:
-    // Default constructor
+    Screen(std::shared_ptr<Process> process);
     Screen();
+    ~Screen() = default;
+    void onEnabled() override;
+    void process() override;
+    void display() override;
 
-    // Parameterized constructor
-    Screen(const string& screenId, Process* processPtr, const string& creationTime);
-
-    // Method to display info about the process and screen
-    void drawScreen();
+private:
+    std::shared_ptr<Process> attachedProcess;
+    string timeCreated;
 };
