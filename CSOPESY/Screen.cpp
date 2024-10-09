@@ -25,7 +25,7 @@ Screen::Screen() : AConsole(""), attachedProcess(nullptr), timeCreated("unknown"
 
 // Constructor
 Screen::Screen(std::shared_ptr<Process> processPtr)
-    : AConsole(processPtr->name), attachedProcess(processPtr), timeCreated(getCurrentTimestamp()) {
+    : AConsole(processPtr->getName()), attachedProcess(processPtr), timeCreated(getCurrentTimestamp()) {
 }
 
 void Screen::onEnabled() {
@@ -61,8 +61,8 @@ void Screen::process() {
 
 void Screen::display() {
     if (attachedProcess) {
-        cout << "\n--- Screen for Process: " << attachedProcess->name << " ---\n";
-        cout << "Instruction: " << attachedProcess->currentLine << " / " << attachedProcess->totalLines << endl;
+        cout << "\n--- Screen for Process: " << attachedProcess->getName() << " ---\n";
+        cout << "Instruction: " << attachedProcess->getCommandCounter() << " / " << attachedProcess->getLinesOfCode() << endl;
         cout << "Screen Created: " << timeCreated << endl;
         cout << "-------------------------------------\n";
     }

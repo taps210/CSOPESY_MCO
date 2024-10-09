@@ -19,6 +19,9 @@
     <Filter Include="Process">
       <UniqueIdentifier>{27fca006-c6e1-4232-a4cf-e2d839745fdb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{16286b35-3a6f-4af0-8558-469c1e2886e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSOPESY.cpp">
@@ -39,6 +42,15 @@
     <ClCompile Include="Process.cpp">
       <Filter>Process</Filter>
     </ClCompile>
+    <ClCompile Include="CSOPESYThread.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="ICommand.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="PrintCommand.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleManager.h">
@@ -54,6 +66,15 @@
       <Filter>ConsoleUI</Filter>
     </ClInclude>
     <ClInclude Include="Process.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="CSOPESYThread.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="ICommand.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="PrintCommand.h">
       <Filter>Process</Filter>
     </ClInclude>
   </ItemGroup>

@@ -35,7 +35,7 @@ void MainConsole::process() {
                 ConsoleManager::getInstance()->switchConsole(args[2]);
             }
             else if (args[1] == "-s") {
-                const std::shared_ptr<Process> process = std::make_shared<Process>(args[2], 10);
+                const std::shared_ptr<Process> process = std::make_shared<Process>(1, args[2]);
                 const std::shared_ptr<Screen> screen = std::make_shared<Screen>(process);
 
                 try {
