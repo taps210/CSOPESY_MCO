@@ -2,8 +2,8 @@
 class CSOPESYThread
 {
 public:
-	CSOPESYThread();
-	~CSOPESYThread();
+	CSOPESYThread() {};
+	~CSOPESYThread() = default;
 
 	void start();
 	static void sleep(int ms);

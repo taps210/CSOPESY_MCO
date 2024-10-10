@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "ICommand.h"
 using namespace std;
@@ -29,6 +30,8 @@ public:
     int getCpuCoreId() const;
     ProcessState getState() const;
     string getName() const;
+
+    void setState(Process::ProcessState processState);
 
 private:
     int pid;

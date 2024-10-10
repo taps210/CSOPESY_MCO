@@ -69,3 +69,7 @@ Process::ProcessState Process::getState() const {
 string Process::getName() const {
     return name;
 }
+
+void Process::setState(Process::ProcessState processState) {
+    currentState = processState;
+}

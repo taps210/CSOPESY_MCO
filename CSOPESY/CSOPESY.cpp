@@ -6,10 +6,12 @@
 #include "Process.h"
 #include "Screen.h"
 #include "ConsoleManager.h"
+#include "GlobalScheduler.h"
 
 int main()
 {
     ConsoleManager::initialize();
+    GlobalScheduler::initialize();
    
     bool running = true;
 

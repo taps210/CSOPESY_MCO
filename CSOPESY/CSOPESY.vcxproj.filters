@@ -22,6 +22,9 @@
     <Filter Include="Threading">
       <UniqueIdentifier>{16286b35-3a6f-4af0-8558-469c1e2886e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CPU">
+      <UniqueIdentifier>{4dc26ea1-de94-42db-b95d-a5e5315423c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSOPESY.cpp">
@@ -51,6 +54,18 @@
     <ClCompile Include="PrintCommand.cpp">
       <Filter>Process</Filter>
     </ClCompile>
+    <ClCompile Include="AScheduler.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="FCFSScheduler.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalScheduler.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="SchedulerWorker.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleManager.h">
@@ -76,6 +91,18 @@
     </ClInclude>
     <ClInclude Include="PrintCommand.h">
       <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="AScheduler.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="FCFSScheduler.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalScheduler.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="SchedulerWorker.h">
+      <Filter>CPU</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
