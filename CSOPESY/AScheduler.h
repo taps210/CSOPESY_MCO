@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <queue>
 
 #include "CSOPESYThread.h"
 #include "Process.h"
@@ -23,7 +24,7 @@ public:
 	AScheduler(SchedulingAlgorithm schedulingAlgo);
 
 	void addProcess(std::shared_ptr<Process> process);
-	std::shared_ptr<Process> findProcess(std::string processName);
+	//std::shared_ptr<Process> findProcess(std::string processName);
 	void run() override;
 	void stop();
 
@@ -48,5 +49,6 @@ protected:
 	bool running = true;
 	int workersCount = 4;
 	std::vector<std::shared_ptr<Process>> processes;
+	std::queue<std::shared_ptr<Process>> readyQueue;
 	std::vector<std::shared_ptr<SchedulerWorker>> schedulerWorkers;
 };

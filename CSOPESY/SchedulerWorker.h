@@ -6,6 +6,7 @@
 class SchedulerWorker : public CSOPESYThread {
 public:
     SchedulerWorker() {};
+    SchedulerWorker(int cpuCoreId) : cpuCoreId(cpuCoreId) {};
     ~SchedulerWorker() = default;
 
     void update(bool running);
@@ -14,6 +15,7 @@ public:
     bool isRunning();
 
 private:
+    int cpuCoreId;
     std::shared_ptr<Process> currentProcess = nullptr;
     bool running = false;
 };

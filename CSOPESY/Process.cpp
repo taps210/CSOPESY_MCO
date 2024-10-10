@@ -61,7 +61,6 @@ int Process::getCpuCoreId() const {
     return cpuCoreId;
 }
 
-
 Process::ProcessState Process::getState() const {
     return currentState;
 }
@@ -72,4 +71,8 @@ string Process::getName() const {
 
 void Process::setState(Process::ProcessState processState) {
     currentState = processState;
+}
+
+void Process::setCpuCoreId(int _cpuCoreId) {
+    cpuCoreId = _cpuCoreId;
 }

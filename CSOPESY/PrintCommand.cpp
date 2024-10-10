@@ -19,9 +19,9 @@ void PrintCommand::execute() {
         return;
     }
 
-    if (!fileExists) {
-        std::cout << "File created: " << filename << std::endl;
-    }
+    //if (!fileExists) {
+    //    std::cout << "File created: " << filename << std::endl;
+    //}
 
     out << toPrint << std::endl;
 

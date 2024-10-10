@@ -32,6 +32,7 @@ public:
     string getName() const;
 
     void setState(Process::ProcessState processState);
+    void setCpuCoreId(int _cpuCoreId);
 
 private:
     int pid;

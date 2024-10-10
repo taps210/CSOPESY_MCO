@@ -10,6 +10,5 @@ public:
     void execute() override;
 
 private:
-    std::queue<std::shared_ptr<Process>> readyQueue;
     std::shared_ptr<SchedulerWorker> findAvailableWorker();
 };
