@@ -14,7 +14,7 @@ void Process::addCommand(ICommand::CommandType commandType) {
     // Use the concrete subclasses based on the command type
     switch (commandType) {
     case ICommand::PRINT:
-        newCommand = std::make_shared<PrintCommand>(pid, "Hello, world!");
+        newCommand = std::make_shared<PrintCommand>(pid, "Hello, world from " + getName() + "!");
         break;
     default:
         std::cout << "Invalid argument";
