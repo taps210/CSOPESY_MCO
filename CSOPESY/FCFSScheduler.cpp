@@ -4,7 +4,6 @@
 
 FCFSScheduler::FCFSScheduler()
 	: AScheduler(SchedulingAlgorithm::FCFS) {
-
 }
 
 void FCFSScheduler::init() {
@@ -31,9 +30,7 @@ void FCFSScheduler::execute() {
 		while (!(worker = findAvailableWorker())) {
 			sleep(100);
 		}
-
-		std::cout << "Assigning Process";
+		worker->update(true);
 		worker->assignProcess(currentProcess);
-
 	}
 }

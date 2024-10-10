@@ -15,5 +15,5 @@ public:
 
 private:
     std::shared_ptr<Process> currentProcess = nullptr;
-    bool running;
+    bool running = false;
 };

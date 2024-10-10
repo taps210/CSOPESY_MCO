@@ -61,6 +61,36 @@ void GlobalScheduler::create10Processes() {
     }
 }
 
+void GlobalScheduler::listProcesses() const {
+    if (processes.empty()) {
+        std::cout << "No processes found. \n";
+        return;
+    }
+
+    for (const auto& p : processes) {
+        auto process = p.second;
+
+        std::string status;
+        if (process->isFinished()) {
+            status = "Finished";
+        }
+
+        else {
+            status = "Core: " + std::to_string(process->getCpuCoreId());
+        }
+
+        int currentLinesOfCode = process->getCommandCounter();
+        int totalLinesOfCode = process->getLinesOfCode();
+
+        std::cout << "Process Name: " << process->getName()
+            << " | PID: " << process->getPid()
+            << " | Status: " << (process->isFinished() ? "Finished" : "Not Finished")
+            << " | Core ID: " << (process->isFinished() ? "N/A" : std::to_string(process->getCpuCoreId()))
+            << " | Lines of Code: " << currentLinesOfCode << "/" << totalLinesOfCode
+            << "\n";
+    }
+}
+
 std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
     auto it = processes.find(processName);
     if (it != processes.end()) {

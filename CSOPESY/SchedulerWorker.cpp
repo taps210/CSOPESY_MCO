@@ -1,28 +1,28 @@
 #include "SchedulerWorker.h"
 #include "GlobalScheduler.h"
+#include <iostream>
 
 void SchedulerWorker::update(bool isRunning) {
-    this->running = running;
+    this->running = isRunning;
 }
 
 void SchedulerWorker::assignProcess(std::shared_ptr<Process> process) {
     this->currentProcess = process;
-    running = true;
+    this->update(true);
 }
 
 void SchedulerWorker::run() {
-    while (this->running) {
+    while (true) {
         if (currentProcess) {
             currentProcess->setState(currentProcess->RUNNING);
-
             while (!currentProcess->isFinished()) {
                 currentProcess->executeCurrentCommand();
                 currentProcess->moveToNextLine();
             }
-
             currentProcess = nullptr;
             running = false;
         }
+        sleep(200);
     }
 }
 
