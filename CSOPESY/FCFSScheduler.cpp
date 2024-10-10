@@ -32,6 +32,7 @@ void FCFSScheduler::execute() {
 			sleep(100);
 		}
 
+		std::cout << "Assigning Process";
 		worker->assignProcess(currentProcess);
 
 	}

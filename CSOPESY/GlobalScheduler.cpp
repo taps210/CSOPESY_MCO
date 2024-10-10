@@ -1,6 +1,7 @@
 #include "GlobalScheduler.h"
 #include "FCFSScheduler.h"
 #include <memory>
+#include <iostream>
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
 GlobalScheduler::GlobalScheduler() {
@@ -39,6 +40,11 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     static int nextPid = 1;
     std::shared_ptr<Process> newProcess = std::make_shared<Process>(nextPid++, processName);
 
+    // Week 6
+    for (int i = 0; i < 10; i++) {
+        newProcess->addCommand(ICommand::PRINT);
+    }
+
     processes[processName] = newProcess;
 
     if (scheduler) {
@@ -46,6 +52,13 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     }
 
     return newProcess;
+}
+
+// Week 6
+void GlobalScheduler::create10Processes() {
+    for (int i = 0; i < 10; i++) {
+        GlobalScheduler::getInstance()->createUniqueProcess("process_" + std::to_string(i));
+    }
 }
 
 std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {

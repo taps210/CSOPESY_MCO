@@ -33,6 +33,7 @@ void MainConsole::process() {
             }
             else if (args[1] == "-r") {
                 ConsoleManager::getInstance()->switchConsole(args[2]);
+                break;
             }
             else if (args[1] == "-s") {
                 const std::shared_ptr<Process> process = std::make_shared<Process>(1, args[2]);
@@ -41,6 +42,7 @@ void MainConsole::process() {
                 try {
                     ConsoleManager::getInstance()->registerScreen(screen);
                     ConsoleManager::getInstance()->switchConsole(args[2]);
+                    break;
                 }
                 catch (const std::exception& e) {
                     std::cout << e.what();

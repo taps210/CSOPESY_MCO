@@ -12,6 +12,7 @@ int main()
 {
     ConsoleManager::initialize();
     GlobalScheduler::initialize();
+    GlobalScheduler::getInstance()->create10Processes();
    
     bool running = true;
 

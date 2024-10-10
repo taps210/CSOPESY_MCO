@@ -41,7 +41,6 @@ void ConsoleManager::switchConsole(const std::string consoleName) {
 	}
 	system("cls");
 	this->currentConsole = this->consoleTable[consoleName];
-	this->currentConsole->onEnabled();
 }
 
 void ConsoleManager::registerScreen(std::shared_ptr<Screen> screenRef) {
