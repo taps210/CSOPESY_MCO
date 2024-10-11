@@ -34,12 +34,13 @@ void PrintCommand::execute(int cpuCoreId) {
         return;
     }
 
-    //if (!fileExists) {
-    //    std::cout << "File created: " << filename << std::endl;
-    //}
+    if (!fileExists) {
+        //std::cout << "File created: " << filename << std::endl;
+        out << "Process name: " << "process_" << this->pid << "\n";
+        out << "Logs:\n\n";
+    }
 
-    out << "Process name: " << "process_" << this->pid << "\n";
-    out << "Logs:\n\n";
+   
 
     out << "(" << getTimestamp() << ") "
         << "\tCore:" << cpuCoreId << "\t\t" << toPrint << "\n";
