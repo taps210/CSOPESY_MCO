@@ -2,10 +2,26 @@
 
 #include "Process.h"
 #include "PrintCommand.h"
+#include <chrono>
+
+std::string getCurrentTimestamp() {
+    auto now = chrono::system_clock::now();
+    std::time_t now_time = chrono::system_clock::to_time_t(now);
+    std::tm local_tm;
+#ifdef _WIN32
+    localtime_s(&local_tm, &now_time);
+#else
+    (&now_time, &local_tm);
+#endif
+    std::ostringstream oss;
+    oss << std::put_time(&local_tm, "%m/%d/%Y, %I:%M:%S %p");
+
+    return oss.str();
+}
 
 // Constructor
 Process::Process(int pid, string name)
-    : pid(pid), name(name), commandCounter(0), currentState(READY) {}
+    : pid(pid), name(name), commandCounter(0), currentState(READY), timeCreated(getCurrentTimestamp()){}
 
 // Adds a new command to the process
 void Process::addCommand(ICommand::CommandType commandType) {
@@ -67,6 +83,10 @@ Process::ProcessState Process::getState() const {
 
 string Process::getName() const {
     return name;
+}
+
+string Process::getTimeCreated() const {
+    return timeCreated;
 }
 
 void Process::setState(Process::ProcessState processState) {

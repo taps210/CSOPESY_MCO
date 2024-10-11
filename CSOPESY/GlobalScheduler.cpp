@@ -67,39 +67,36 @@ void GlobalScheduler::listProcesses() const {
         return;
     }
 
+    std::cout << "------------------------------------------\n";
+    std::cout << "Running processes:\n";
+
     for (const auto& p : processes) {
         auto process = p.second;
-
-        std::string status;
-        if (process->isFinished()) {
-            status = "Finished";
+        if (!process->isFinished()) {
+            int currentLinesOfCode = process->getCommandCounter();
+            int totalLinesOfCode = process->getLinesOfCode();
+            std::string coreIdOutput = (process->getCpuCoreId() == -1) ? "N/A" : std::to_string(process->getCpuCoreId());
+            std::cout << process->getName() << "\t("
+                << process->getTimeCreated() << ")"
+                << "\tCore: " << coreIdOutput
+                << "\t" << (currentLinesOfCode == 0 ? currentLinesOfCode : currentLinesOfCode + 1)
+                << " / " << totalLinesOfCode << "\n";
         }
-
-        else {
-            status = "Core: " + std::to_string(process->getCpuCoreId());
-        }
-
-        int currentLinesOfCode = process->getCommandCounter();
-        int totalLinesOfCode = process->getLinesOfCode();
-
-        std::string coreIdOutput;
-        if (process->isFinished()) {
-            coreIdOutput = "Finished";
-        }
-        else if (process->getCpuCoreId() == -1) {
-            coreIdOutput = "N/A";
-        }
-        else {
-            coreIdOutput = std::to_string(process->getCpuCoreId());
-        }
-
-        std::cout << "Process Name: " << process->getName()
-            << " | PID: " << process->getPid()
-            << " | Status: " << (process->isFinished() ? "Finished" : "Not Finished")
-            << " | Core ID: " << coreIdOutput
-            << " | Lines of Code: " << currentLinesOfCode << "/" << totalLinesOfCode
-            << "\n";
     }
+
+    std::cout << "\nFinished processes:\n";
+    for (const auto& p : processes) {
+        auto process = p.second;
+        if (process->isFinished()) {
+            int totalLinesOfCode = process->getLinesOfCode();
+            std::cout << process->getName() << "\t("
+                << process->getTimeCreated() << ")"
+                << "\tFinished\t"
+                << totalLinesOfCode << " / " << totalLinesOfCode << "\n";
+        }
+    }
+
+    std::cout << "------------------------------------------\n";
 }
 
 std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {

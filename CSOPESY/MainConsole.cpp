@@ -30,12 +30,12 @@ void MainConsole::process() {
             std::cout << "Initialize command recognized. Doing something.\n";
         }
         else if (args[0] == "screen" && args[1] == "-ls") {
-            while (true) {
-                system("cls");
-                GlobalScheduler::getInstance()->listProcesses();
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            }
-            //GlobalScheduler::getInstance()->listProcesses();
+            //while (true) {
+                //system("cls");
+                //GlobalScheduler::getInstance()->listProcesses();
+                //std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            //}
+            GlobalScheduler::getInstance()->listProcesses();
         }
         else if (args[0] == "screen") {
             if (args.size() != 3) {

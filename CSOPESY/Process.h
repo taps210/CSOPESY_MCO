@@ -30,6 +30,7 @@ public:
     int getCpuCoreId() const;
     ProcessState getState() const;
     string getName() const;
+    string getTimeCreated() const;
 
     void setState(Process::ProcessState processState);
     void setCpuCoreId(int _cpuCoreId);
@@ -43,4 +44,5 @@ private:
     int commandCounter;
     int cpuCoreId = -1;
     ProcessState currentState;
+    string timeCreated;
 };
