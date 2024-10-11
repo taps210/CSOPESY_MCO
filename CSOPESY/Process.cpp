@@ -30,7 +30,7 @@ void Process::addCommand(ICommand::CommandType commandType) {
     // Use the concrete subclasses based on the command type
     switch (commandType) {
     case ICommand::PRINT:
-        newCommand = std::make_shared<PrintCommand>(pid, "Hello, world from " + getName() + "!");
+        newCommand = std::make_shared<PrintCommand>(pid, + "Hello, world from " + getName() + "!");
         break;
     default:
         std::cout << "Invalid argument";
@@ -43,7 +43,7 @@ void Process::addCommand(ICommand::CommandType commandType) {
 // Executes the current command and updates the process state accordingly
 void Process::executeCurrentCommand() const {
     if (commandCounter < commandList.size() && currentState == RUNNING) {
-        commandList[commandCounter]->execute();
+        commandList[commandCounter]->execute(cpuCoreId);
     }
 }
 

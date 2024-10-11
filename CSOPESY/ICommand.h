@@ -10,7 +10,7 @@ public:
 
 	ICommand(int pid, CommandType commandType);
 	CommandType getCommandType();
-	virtual void execute() = 0;
+	virtual void execute(int cpuCoreId) = 0;
 protected:
 	int pid;
 	CommandType commandType;

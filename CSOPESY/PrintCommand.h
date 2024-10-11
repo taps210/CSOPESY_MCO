@@ -5,7 +5,8 @@
 class PrintCommand : public ICommand {
 public:
 	PrintCommand(int pid, std::string toPrint);
-	void execute() override; 
+	// void execute(); 
+	void execute(int cpuCoreId) override;
 private:
 	std::string toPrint;
 };

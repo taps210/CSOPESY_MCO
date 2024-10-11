@@ -37,7 +37,7 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
         return nullptr;
     }
 
-    static int nextPid = 1;
+    static int nextPid = 0;
     std::shared_ptr<Process> newProcess = std::make_shared<Process>(nextPid++, processName);
 
     // Week 6
