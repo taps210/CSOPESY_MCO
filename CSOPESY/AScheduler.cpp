@@ -28,9 +28,9 @@ void AScheduler::addProcess(std::shared_ptr<Process> process) {
 
 void AScheduler::run() {
     init();
-    while (running) {
-        execute();
-    }
+    //while (running) {
+    //    execute();
+    //}
 }
 
 void AScheduler::stop() {

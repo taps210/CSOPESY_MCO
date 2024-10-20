@@ -20,7 +20,7 @@ public:
 	void create10Processes();
 	void listProcesses() const;
 
-	void tick() const;
+	void tick();
 
 private:
 	GlobalScheduler();
@@ -30,4 +30,6 @@ private:
 	static GlobalScheduler* sharedInstance;
 	std::shared_ptr<AScheduler> scheduler;
 	std::unordered_map<string, std::shared_ptr<Process>> processes;
+	int ticks;
+	int cpuCycles = 0;
 };

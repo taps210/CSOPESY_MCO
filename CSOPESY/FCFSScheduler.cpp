@@ -22,16 +22,14 @@ std::shared_ptr<SchedulerWorker> FCFSScheduler::findAvailableWorker() {
 }
 
 void FCFSScheduler::execute() {
-	while (!readyQueue.empty()) {
+	std::shared_ptr<SchedulerWorker> worker = nullptr;
+	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
 		readyQueue.pop();
-		
-		std::shared_ptr<SchedulerWorker> worker = nullptr;
-
-		while (!(worker = findAvailableWorker())) {
-			sleep(200);
-		}
 		worker->update(true);
 		worker->assignProcess(currentProcess);
+	}
+	for (int i = 0; i < schedulerWorkers.size(); i++) {
+		schedulerWorkers[i]->tick();
 	}
 }

@@ -27,9 +27,8 @@ GlobalScheduler* GlobalScheduler::getInstance() {
     return sharedInstance;
 }
 
-void GlobalScheduler::tick() const
-{
-    this->scheduler->execute();
+void GlobalScheduler::tick() {
+    ticks = ticks + 1;
 }
 
 std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string processName) {
@@ -62,6 +61,7 @@ void GlobalScheduler::create10Processes() {
 }
 
 void GlobalScheduler::listProcesses() const {
+    //cout << "CPU Cycles: " << cpuCycles << " " << "Ticks: " << ticks << " " << "Workers: " << scheduler->schedulerWorkers.size() << "\n";
     if (processes.empty()) {
         std::cout << "No processes found. \n";
         return;
@@ -108,5 +108,13 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
 }
 
 void GlobalScheduler::run() {
-    this->scheduler->execute();
+    ticks = scheduler->schedulerWorkers.size();
+    while (true) {
+        sleep(50);
+        if (ticks == scheduler->schedulerWorkers.size()) {
+            ticks = 0;
+            this->cpuCycles++;
+            this->scheduler->execute();
+        }
+    }
 }
