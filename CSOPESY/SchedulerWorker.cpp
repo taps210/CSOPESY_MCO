@@ -40,10 +40,15 @@ void SchedulerWorker::tick() {
         currentProcess->setCpuCoreId(cpuCoreId);
         currentProcess->executeCurrentCommand();
         currentProcess->moveToNextLine();
+        currentProcess->decrementRemainingTime();
     }
     GlobalScheduler::getInstance()->tick();
 }
 
 bool SchedulerWorker::isRunning() {
     return running;
+}
+
+std::shared_ptr<Process> SchedulerWorker::getProcess() {
+    return currentProcess;
 }

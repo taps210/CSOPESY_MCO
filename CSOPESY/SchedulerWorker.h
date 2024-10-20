@@ -14,6 +14,7 @@ public:
     void run();
     void assignProcess(std::shared_ptr<Process> process);
     bool isRunning();
+    std::shared_ptr<Process> getProcess();
 
 private:
     int cpuCoreId;

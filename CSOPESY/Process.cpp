@@ -21,7 +21,7 @@ std::string getCurrentTimestamp() {
 
 // Constructor
 Process::Process(int pid, string name)
-    : pid(pid), name(name), commandCounter(0), currentState(READY), timeCreated(getCurrentTimestamp()){}
+    : pid(pid), name(name), commandCounter(0), currentState(READY), timeCreated(getCurrentTimestamp()), remainingTime(5){}
 
 // Adds a new command to the process
 void Process::addCommand(ICommand::CommandType commandType) {
@@ -95,4 +95,16 @@ void Process::setState(Process::ProcessState processState) {
 
 void Process::setCpuCoreId(int _cpuCoreId) {
     cpuCoreId = _cpuCoreId;
+}
+
+int Process::getRemainingTime() {
+    return remainingTime;
+}
+
+void Process::setRemainingTime(int _remainingTime) {
+    this->remainingTime = _remainingTime;
+}
+
+void Process::decrementRemainingTime() {
+    this->remainingTime--;
 }
