@@ -2,6 +2,9 @@
 #include "FCFSScheduler.h"
 #include <memory>
 #include <iostream>
+#include <fstream>
+#include <filesystem>
+#include <string>
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
 GlobalScheduler::GlobalScheduler() {
@@ -60,15 +63,17 @@ void GlobalScheduler::create10Processes() {
         GlobalScheduler::getInstance()->createUniqueProcess("process_" + std::to_string(i));
     }
 }
+std::string listOfProcess;
 
-void GlobalScheduler::listProcesses() const {
+std::string GlobalScheduler::listProcesses() const {
+    listOfProcess = "";
     if (processes.empty()) {
-        std::cout << "No processes found. \n";
-        return;
+        listOfProcess += "No processes found.\n";
+        return listOfProcess;
     }
 
-    std::cout << "------------------------------------------\n";
-    std::cout << "Running processes:\n";
+    listOfProcess += ("------------------------------------------\n");
+    listOfProcess += "Running processes:\n";
 
     for (const auto& p : processes) {
         auto process = p.second;
@@ -76,27 +81,41 @@ void GlobalScheduler::listProcesses() const {
             int currentLinesOfCode = process->getCommandCounter();
             int totalLinesOfCode = process->getLinesOfCode();
             std::string coreIdOutput = (process->getCpuCoreId() == -1) ? "N/A" : std::to_string(process->getCpuCoreId());
-            std::cout << process->getName() << "\t("
-                << process->getTimeCreated() << ")"
-                << "\tCore: " << coreIdOutput
-                << "\t" << (currentLinesOfCode == 0 ? currentLinesOfCode : currentLinesOfCode + 1)
-                << " / " << totalLinesOfCode << "\n";
+            listOfProcess += process->getName() + "\t(" +
+                process->getTimeCreated() + ")" +
+                "\tCore: " + coreIdOutput +
+                "\t" + std::to_string(currentLinesOfCode == 0 ? currentLinesOfCode : currentLinesOfCode + 1) +
+                " / " + std::to_string(totalLinesOfCode) + "\n";
         }
     }
 
-    std::cout << "\nFinished processes:\n";
+    listOfProcess += "\nFinished processes:\n";
     for (const auto& p : processes) {
         auto process = p.second;
         if (process->isFinished()) {
             int totalLinesOfCode = process->getLinesOfCode();
-            std::cout << process->getName() << "\t("
-                << process->getTimeCreated() << ")"
-                << "\tFinished\t"
-                << totalLinesOfCode << " / " << totalLinesOfCode << "\n";
+            listOfProcess += process->getName() + "\t(" +
+                process->getTimeCreated() + ")" +
+                "\tFinished\t" +
+                std::to_string(totalLinesOfCode) + " / " + std::to_string(totalLinesOfCode) + "\n";
         }
     }
 
-    std::cout << "------------------------------------------\n";
+    listOfProcess += "------------------------------------------\n";
+    
+    return listOfProcess;
+}
+
+void GlobalScheduler::logProcess() const {
+    std::string outputFilename = "report-util.txt";
+    std::ofstream out(outputFilename, std::ios::trunc);
+    if (!out.is_open()) {
+        std::cerr << "Error: Could not open the log file!" << std::endl;
+        return;
+    }
+
+    out << listOfProcess;
+    out.close();
 }
 
 std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {

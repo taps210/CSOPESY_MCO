@@ -7,13 +7,14 @@
 #include <string>
 #include <thread>
 
+
 void MainConsole::onEnabled() {
     display();
     process();
 }
 
 void MainConsole::process() {
-    while (true) {
+    while (ConsoleManager::getInstance()->isRunning()) {
         std::cout << "Enter a command: ";
 
         std::string command;
@@ -35,7 +36,7 @@ void MainConsole::process() {
                 //GlobalScheduler::getInstance()->listProcesses();
                 //std::this_thread::sleep_for(std::chrono::milliseconds(100));
             //}
-            GlobalScheduler::getInstance()->listProcesses();
+            std::cout << GlobalScheduler::getInstance()->listProcesses();
         }
         else if (args[0] == "screen") {
             if (args.size() != 3) {
@@ -70,17 +71,20 @@ void MainConsole::process() {
             std::cout << "scheduler-stop command recognized. Doing something.\n";
         }
         else if (args[0] == "report-util") {
-            std::cout << "Report-util command recognized. Doing something.\n";
+            GlobalScheduler::getInstance()->logProcess();
+            std::cout << "Process log written to report-util.txt successfully." << std::endl;
         }
+
         else if (args[0] == "clear") {
             ConsoleManager::getInstance()->switchConsole(MAIN_CONSOLE);
         }
         else if (args[0] == "exit") {
-            // TODO: Replace with non-brute force approach. Use ConsoleManager::exitApplication()
-            exit(0);
+            ConsoleManager::getInstance()->exitApplication();
+            std::cout << "Exiting application...\n";
+            break;
         }
         else {
-            std::cout << args[0] + " command not recognized." << '\n';
+            std::cout << args[0] + " command not recognized." << endl;
         }
     }
 }

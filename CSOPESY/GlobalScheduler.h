@@ -18,7 +18,8 @@ public:
 
 	// Week 6
 	void create10Processes();
-	void listProcesses() const;
+	std::string listProcesses() const;
+	void logProcess() const;
 
 	void tick() const;
 
