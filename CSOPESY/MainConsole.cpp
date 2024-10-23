@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include <fstream>
 
 
 void MainConsole::onEnabled() {
@@ -16,6 +17,11 @@ void MainConsole::onEnabled() {
 void MainConsole::process() {
     while (ConsoleManager::getInstance()->isRunning()) {
         std::cout << "Enter a command: ";
+
+        if (tester == true) {
+            GlobalScheduler::getInstance()->createProcess();
+            std::cout << "scheduler-test command recognized. Doing something.\n";
+        }
 
         std::string command;
         std::string word;
@@ -28,7 +34,11 @@ void MainConsole::process() {
         }
 
         if (args[0] == "initialize") {
-            std::cout << "Initialize command recognized. Doing something.\n";
+            initializeSystem();
+            initialized = true;
+        }
+        else if (!initialized) {
+            std::cout << "Please run 'initialize' first.\n";
         }
         else if (args[0] == "screen" && args[1] == "-ls") {
             //while (true) {
@@ -65,9 +75,11 @@ void MainConsole::process() {
 
         }
         else if (args[0] == "scheduler-test") {
+            tester = true;
             std::cout << "scheduler-test command recognized. Doing something.\n";
         }
         else if (args[0] == "scheduler-stop") {
+            tester = false;
             std::cout << "scheduler-stop command recognized. Doing something.\n";
         }
         else if (args[0] == "report-util") {
@@ -101,4 +113,52 @@ void MainConsole::display() {
     std::cout << "\033[33m";
     std::cout << "Type 'exit' to quit, 'clear' to clear the screen\n";
     std::cout << "\033[0m";
+}
+
+void MainConsole::initializeSystem() {
+    std::ifstream configFile("config.txt");
+    std::string param;
+    int numCpu = 1;
+    std::string schedulerType;
+    int quantumCycles = 1;
+    int batchProcessFreq = 1;
+    int minIns = 1;
+    int maxIns = 1;
+    int delaysPerExec = 0;
+
+    while (configFile >> param) {
+        if (param == "num-cpu") {
+            configFile >> numCpu;
+            numCpu = std::clamp(numCpu, 1, 128);
+        }
+        else if (param == "scheduler") {
+            configFile >> schedulerType;
+        }
+        else if (param == "quantum-cycles") {
+            configFile >> quantumCycles;
+        }
+        else if (param == "batch-process-freq") {
+            configFile >> batchProcessFreq;
+        }
+        else if (param == "min-ins") {
+            configFile >> minIns;
+        }
+        else if (param == "max-ins") {
+            configFile >> maxIns;
+        }
+        else if (param == "delays-per-exec") {
+            configFile >> delaysPerExec;
+        }
+    }
+}
+
+void MainConsole::configureScheduler(int numCpu, const std::string& schedulerType, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec) {
+    // Set up CPUs and scheduler based on parsed configuration
+    GlobalScheduler::getInstance()->setNumCpus(numCpu);
+
+    //GlobalScheduler::getInstance()->setSchedulerAlgorithm(schedulerType);
+
+
+
+    // Set other parameters as needed
 }

@@ -13,6 +13,10 @@ AScheduler::AScheduler(SchedulingAlgorithm schedulingAlgo)
     }
 }
 
+void AScheduler::setworkersCount(int count) {
+    workersCount = count;
+}
+
 void AScheduler::addProcess(std::shared_ptr<Process> process) {
     readyQueue.push(process);
 }

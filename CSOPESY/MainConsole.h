@@ -10,4 +10,10 @@ public:
 	void onEnabled() override;
 	void process() override;
 	void display() override;
+	void initializeSystem();
+	void configureScheduler(int numCpu, const std::string& schedulerType, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec);
+
+private:
+	bool initialized = false;
+	bool tester = false;
 };

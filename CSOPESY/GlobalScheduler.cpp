@@ -129,3 +129,16 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
 void GlobalScheduler::run() {
     this->scheduler->execute();
 }
+
+void GlobalScheduler::setNumCpus(int numCpu) {
+    this->scheduler->setworkersCount(numCpu);
+}
+
+void setSchedulerAlgorithm(string schedulerType) {
+    //this->scheduler->
+}
+
+void GlobalScheduler::createProcess() {
+    j++;
+    GlobalScheduler::getInstance()->createUniqueProcess("testprocess_" + std::to_string(j));
+}

@@ -27,6 +27,7 @@ public:
 	//std::shared_ptr<Process> findProcess(std::string processName);
 	void run() override;
 	void stop();
+	void setworkersCount(int count);
 
 	virtual void init() = 0;
 	virtual void execute() = 0;

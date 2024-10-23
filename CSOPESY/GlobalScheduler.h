@@ -18,10 +18,14 @@ public:
 
 	// Week 6
 	void create10Processes();
+	void listProcesses() const;
+	void tick() const;
 	std::string listProcesses() const;
 	void logProcess() const;
 
-	void tick() const;
+	// Week 7
+	void setNumCpus(int numCpu);
+	void createProcess();
 
 private:
 	GlobalScheduler();
@@ -31,4 +35,5 @@ private:
 	static GlobalScheduler* sharedInstance;
 	std::shared_ptr<AScheduler> scheduler;
 	std::unordered_map<string, std::shared_ptr<Process>> processes;
+	int j = 0;
 };
