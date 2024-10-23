@@ -18,14 +18,13 @@ public:
 
 	// Week 6
 	void create10Processes();
-	void listProcesses() const;
 	void tick() const;
-	std::string listProcesses() const;
-	void logProcess() const;
 
 	// Week 7
+	std::string listProcesses() const;
 	void setNumCpus(int numCpu);
 	void createProcess();
+	void logProcess() const;
 
 private:
 	GlobalScheduler();

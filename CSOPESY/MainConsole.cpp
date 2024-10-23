@@ -20,7 +20,6 @@ void MainConsole::process() {
 
         if (tester == true) {
             GlobalScheduler::getInstance()->createProcess();
-            std::cout << "scheduler-test command recognized. Doing something.\n";
         }
 
         std::string command;

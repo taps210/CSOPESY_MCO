@@ -63,6 +63,13 @@ void GlobalScheduler::create10Processes() {
         GlobalScheduler::getInstance()->createUniqueProcess("process_" + std::to_string(i));
     }
 }
+
+// Week 7
+void GlobalScheduler::createProcess() {
+    j++;
+    GlobalScheduler::getInstance()->createUniqueProcess("testprocess_" + std::to_string(j));
+}
+
 std::string listOfProcess;
 
 std::string GlobalScheduler::listProcesses() const {
@@ -136,9 +143,4 @@ void GlobalScheduler::setNumCpus(int numCpu) {
 
 void setSchedulerAlgorithm(string schedulerType) {
     //this->scheduler->
-}
-
-void GlobalScheduler::createProcess() {
-    j++;
-    GlobalScheduler::getInstance()->createUniqueProcess("testprocess_" + std::to_string(j));
 }
