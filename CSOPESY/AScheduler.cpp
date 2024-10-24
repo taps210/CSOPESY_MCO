@@ -1,9 +1,9 @@
 #include "AScheduler.h"
 #include <iostream>
 
-AScheduler::AScheduler(SchedulingAlgorithm schedulingAlgo)
+AScheduler::AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo)
     : schedulingAlgo(schedulingAlgo) {
-    for (int i = 0; i < workersCount; i++) {
+    for (int i = 0; i < numCpu; i++) {
         // Initialize worker
         auto worker = std::make_shared<SchedulerWorker>(i);
         schedulerWorkers.push_back(worker);
@@ -11,10 +11,6 @@ AScheduler::AScheduler(SchedulingAlgorithm schedulingAlgo)
         // Start the worker
         worker->start();
     }
-}
-
-void AScheduler::setworkersCount(int count) {
-    workersCount = count;
 }
 
 void AScheduler::addProcess(std::shared_ptr<Process> process) {

@@ -2,8 +2,8 @@
 #include "SchedulerWorker.h"
 #include <iostream>
 
-FCFSScheduler::FCFSScheduler()
-	: AScheduler(SchedulingAlgorithm::FCFS) {
+FCFSScheduler::FCFSScheduler(int numCpu)
+	: AScheduler(numCpu, SchedulingAlgorithm::FCFS) {
 }
 
 void FCFSScheduler::init() {

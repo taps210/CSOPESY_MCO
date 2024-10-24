@@ -21,13 +21,12 @@ public:
 		ROUND_ROBIN
 	};
 
-	AScheduler(SchedulingAlgorithm schedulingAlgo);
+	AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo);
 
 	void addProcess(std::shared_ptr<Process> process);
 	//std::shared_ptr<Process> findProcess(std::string processName);
 	void run() override;
 	void stop();
-	void setworkersCount(int count);
 
 	virtual void init() = 0;
 	virtual void execute() = 0;

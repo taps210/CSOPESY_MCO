@@ -18,10 +18,6 @@ void MainConsole::process() {
     while (ConsoleManager::getInstance()->isRunning()) {
         std::cout << "Enter a command: ";
 
-        if (tester == true) {
-            GlobalScheduler::getInstance()->createProcess();
-        }
-
         std::string command;
         std::string word;
         getline(cin, command);
@@ -74,11 +70,11 @@ void MainConsole::process() {
 
         }
         else if (args[0] == "scheduler-test") {
-            tester = true;
+            GlobalScheduler::getInstance()->setTester(true);
             std::cout << "scheduler-test command recognized. Doing something.\n";
         }
         else if (args[0] == "scheduler-stop") {
-            tester = false;
+            GlobalScheduler::getInstance()->setTester(false);
             std::cout << "scheduler-stop command recognized. Doing something.\n";
         }
         else if (args[0] == "report-util") {
@@ -150,6 +146,5 @@ void MainConsole::configureSystem() {
         }
     }
 
-    GlobalScheduler::getInstance()->setNumCpus(numCpu);
-    //GlobalScheduler::initialize(schedulerType, quantumCycles, minCom, maxCom);
+    GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec);
 }

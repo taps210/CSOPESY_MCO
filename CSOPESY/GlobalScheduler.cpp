@@ -8,29 +8,32 @@
 #include <string>
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(std::string schedulerType, int quantumCycles, int min, int max) {
+GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec) {
     if (schedulerType == "fcfs") {
-        scheduler = std::make_shared<FCFSScheduler>();
+        scheduler = std::make_shared<FCFSScheduler>(numCpu);
     }
     else if (schedulerType == "rr") {
-        scheduler = std::make_shared<RRScheduler>(quantumCycles);
+        scheduler = std::make_shared<RRScheduler>(numCpu, quantumCycles);
     }
     else {
         std::cerr << "Error: scheduler type does not exist" << std::endl;
     }
 
+    workers = numCpu;
+    processFreq = batchProcessFreq;
     minCom = min;
     maxCom = max;
+    execDelay = delaysPerExec;
 
 
     this->start();
     scheduler->start();
 }
 
-void GlobalScheduler::initialize(std::string schedulerType, int quantumCycles, int min, int max)
+void GlobalScheduler::initialize(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec)
 {
     if (sharedInstance == nullptr) {
-        sharedInstance = new GlobalScheduler(schedulerType, quantumCycles, min, max);
+        sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec);
     }
 }
 
@@ -46,13 +49,6 @@ GlobalScheduler* GlobalScheduler::getInstance() {
 
 void GlobalScheduler::tick() {
     ticks = ticks + 1;
-}
-
-// Week 6
-void GlobalScheduler::create10Processes() {
-    for (int i = 0; i < 10; i++) {
-        GlobalScheduler::getInstance()->createUniqueProcess("process_" + std::to_string(i));
-    }
 }
 
 
@@ -161,16 +157,35 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
 
 void GlobalScheduler::run() {
     ticks = scheduler->schedulerWorkers.size();
+    int processCounter = 0;
+    int execCounter = 0;
+
     while (true) {
-        sleep(100);
-        if (ticks == 4) {
+        if (ticks == workers) {
             ticks = 0;
             this->cpuCycles++;
-            this->scheduler->execute();
+            processCounter++;
+            execCounter++;
+
+            if (execCounter >= execDelay) {
+                this->scheduler->execute();
+                execCounter = 0;
+            }
+
+            if (processCounter >= processFreq) {
+                if (tester) {
+                    createProcess();
+                }
+                processCounter = 0;
+            }
         }
     }
 }
 
-void GlobalScheduler::setNumCpus(int numCpu) {
-    this->scheduler->setworkersCount(numCpu);
+void GlobalScheduler::setTester(bool test) {
+    tester = test;
+}
+
+bool GlobalScheduler::getTester() {
+    return tester;
 }

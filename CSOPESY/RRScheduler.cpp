@@ -2,8 +2,8 @@
 #include "SchedulerWorker.h"
 #include <iostream>
 
-RRScheduler::RRScheduler(int timeQuantum)
-	: AScheduler(SchedulingAlgorithm::ROUND_ROBIN), timeQuantum(timeQuantum) {
+RRScheduler::RRScheduler(int numCpu, int timeQuantum)
+	: AScheduler(numCpu, SchedulingAlgorithm::ROUND_ROBIN), timeQuantum(timeQuantum) {
 }
 
 void RRScheduler::init() {

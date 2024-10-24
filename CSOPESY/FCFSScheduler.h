@@ -4,7 +4,7 @@
 
 class FCFSScheduler : public AScheduler {
 public:
-    FCFSScheduler();
+    FCFSScheduler(int numCpu);
 
     void init() override;
     void execute() override;

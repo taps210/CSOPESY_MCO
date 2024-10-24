@@ -11,8 +11,8 @@
 int main()
 {
     ConsoleManager::initialize();
-    GlobalScheduler::initialize("fcfs", 1, 0, 100);
    
+
     bool running = true;
 
     while (running) {

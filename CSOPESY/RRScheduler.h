@@ -4,7 +4,7 @@
 
 class RRScheduler : public AScheduler {
 public:
-    RRScheduler(int timeQuantum);
+    RRScheduler(int numCpu, int timeQuantum);
 
     void init() override;
     void execute() override;

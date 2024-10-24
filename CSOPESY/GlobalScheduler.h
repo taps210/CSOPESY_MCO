@@ -9,7 +9,7 @@
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize(std::string schedulerType, int quantumCycles, int min, int max);
+	static void initialize(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec);
 	static void destroy();
 	void run() override;
 
@@ -18,16 +18,16 @@ public:
 
 	// Week 6
 	void tick();
-	void create10Processes();
 
 	// Week 7
 	std::string listProcesses() const;
-	void setNumCpus(int numCpu);
 	void createProcess();
 	void logProcess() const;
+	void setTester(bool test);
+	bool getTester();
 
 private:
-	GlobalScheduler(std::string schedulerType, int quantumCycles, int min, int max);
+	GlobalScheduler(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}
@@ -39,4 +39,8 @@ private:
 	int cpuCycles = 0;
 	int minCom = 0;
 	int maxCom = 0;
+	bool tester = false;
+	int workers;
+	int processFreq;
+	int execDelay;
 };
