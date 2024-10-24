@@ -7,7 +7,7 @@
 #include <string>
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(std::string schedulerType, int quantumCycles) {
+GlobalScheduler::GlobalScheduler(std::string schedulerType, int quantumCycles, int min, int max) {
     if (schedulerType == "fcfs") {
         scheduler = std::make_shared<FCFSScheduler>();
     }
@@ -17,14 +17,19 @@ GlobalScheduler::GlobalScheduler(std::string schedulerType, int quantumCycles) {
     else {
         std::cerr << "Error: scheduler type does not exist" << std::endl;
     }
+
+    minCom = min;
+    maxCom = max;
+
+
     this->start();
     scheduler->start();
 }
 
-void GlobalScheduler::initialize(std::string schedulerType, int quantumCycles)
+void GlobalScheduler::initialize(std::string schedulerType, int quantumCycles, int min, int max)
 {
     if (sharedInstance == nullptr) {
-        sharedInstance = new GlobalScheduler(schedulerType, quantumCycles);
+        sharedInstance = new GlobalScheduler(schedulerType, quantumCycles, min, max);
     }
 }
 
@@ -51,10 +56,19 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     static int nextPid = 0;
     std::shared_ptr<Process> newProcess = std::make_shared<Process>(nextPid++, processName);
 
-    // Week 6
-    for (int i = 0; i < 100; i++) {
-        newProcess->addCommand(ICommand::PRINT);
+    // Week 7
+    int i = 0;
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    int commands = minCom + std::rand() % (maxCom - minCom + 1);
+
+    if (commands >= minCom && commands <= maxCom) {
+        for (int i = 0; i < commands; i++) {
+            newProcess->addCommand(ICommand::PRINT);
+        }
+    } else {
+        std::cerr << "Error: Number of commands is not within the min/max bounds" << std::endl;
     }
+
 
     processes[processName] = newProcess;
 
@@ -140,8 +154,4 @@ void GlobalScheduler::run() {
 
 void GlobalScheduler::setNumCpus(int numCpu) {
     this->scheduler->setworkersCount(numCpu);
-}
-
-void setSchedulerAlgorithm(string schedulerType) {
-    //this->scheduler->
 }

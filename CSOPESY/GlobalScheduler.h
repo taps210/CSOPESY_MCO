@@ -9,7 +9,7 @@
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize(std::string schedulerType, int quantumCycles);
+	static void initialize(std::string schedulerType, int quantumCycles, int min, int max);
 	static void destroy();
 	void run() override;
 
@@ -26,7 +26,7 @@ public:
 	void logProcess() const;
 
 private:
-	GlobalScheduler(std::string schedulerType, int quantumCycles);
+	GlobalScheduler(std::string schedulerType, int quantumCycles, int min, int max);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}
@@ -34,4 +34,6 @@ private:
 	std::shared_ptr<AScheduler> scheduler;
 	std::unordered_map<string, std::shared_ptr<Process>> processes;
 	int j = 0;
+	int minCom = 0;
+	int maxCom = 0;
 };
