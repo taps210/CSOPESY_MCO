@@ -149,13 +149,17 @@ void MainConsole::initializeSystem() {
             configFile >> delaysPerExec;
         }
     }
+
+    configureScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, minIns, maxIns, delaysPerExec);
 }
 
 void MainConsole::configureScheduler(int numCpu, const std::string& schedulerType, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec) {
     // Set up CPUs and scheduler based on parsed configuration
     GlobalScheduler::getInstance()->setNumCpus(numCpu);
+    GlobalScheduler::initialize(schedulerType, quantumCycles);
+    
 
-    //GlobalScheduler::getInstance()->setSchedulerAlgorithm(schedulerType);
+
 
 
 

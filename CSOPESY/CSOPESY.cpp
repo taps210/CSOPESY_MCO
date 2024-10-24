@@ -11,8 +11,7 @@
 int main()
 {
     ConsoleManager::initialize();
-    GlobalScheduler::initialize();
-    GlobalScheduler::getInstance()->create10Processes();
+    GlobalScheduler::initialize("fcfs", 1);
    
     bool running = true;
 

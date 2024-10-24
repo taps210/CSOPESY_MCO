@@ -9,7 +9,7 @@
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize();
+	static void initialize(std::string schedulerType, int quantumCycles);
 	static void destroy();
 	void run() override;
 
@@ -17,7 +17,6 @@ public:
 	std::shared_ptr<Process> findProcess(std::string processName);
 
 	// Week 6
-	void create10Processes();
 	void tick() const;
 
 	// Week 7
@@ -27,7 +26,7 @@ public:
 	void logProcess() const;
 
 private:
-	GlobalScheduler();
+	GlobalScheduler(std::string schedulerType, int quantumCycles);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}

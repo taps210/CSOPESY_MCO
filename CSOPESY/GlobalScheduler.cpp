@@ -7,16 +7,24 @@
 #include <string>
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler() {
-    scheduler = std::make_shared<FCFSScheduler>();
+GlobalScheduler::GlobalScheduler(std::string schedulerType, int quantumCycles) {
+    if (schedulerType == "fcfs") {
+        scheduler = std::make_shared<FCFSScheduler>();
+    }
+    else if (schedulerType == "rr") {
+        //TODO: set value of scheduler and pass int quantumCycles
+    }
+    else {
+        std::cerr << "Error: scheduler type does not exist" << std::endl;
+    }
     this->start();
     scheduler->start();
 }
 
-void GlobalScheduler::initialize()
+void GlobalScheduler::initialize(std::string schedulerType, int quantumCycles)
 {
     if (sharedInstance == nullptr) {
-        sharedInstance = new GlobalScheduler();
+        sharedInstance = new GlobalScheduler(schedulerType, quantumCycles);
     }
 }
 
@@ -55,13 +63,6 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     }
 
     return newProcess;
-}
-
-// Week 6
-void GlobalScheduler::create10Processes() {
-    for (int i = 0; i < 10; i++) {
-        GlobalScheduler::getInstance()->createUniqueProcess("process_" + std::to_string(i));
-    }
 }
 
 // Week 7
