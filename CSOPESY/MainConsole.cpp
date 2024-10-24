@@ -33,7 +33,7 @@ void MainConsole::process() {
         }
 
         if (args[0] == "initialize") {
-            initializeSystem();
+            configureSystem();
             initialized = true;
         }
         else if (!initialized) {
@@ -114,15 +114,15 @@ void MainConsole::display() {
     std::cout << "\033[0m";
 }
 
-void MainConsole::initializeSystem() {
+void MainConsole::configureSystem() {
     std::ifstream configFile("config.txt");
     std::string param;
     int numCpu = 1;
     std::string schedulerType;
     int quantumCycles = 1;
     int batchProcessFreq = 1;
-    int minIns = 1;
-    int maxIns = 1;
+    int minCom = 1;
+    int maxCom = 1;
     int delaysPerExec = 0;
 
     while (configFile >> param) {
@@ -140,28 +140,16 @@ void MainConsole::initializeSystem() {
             configFile >> batchProcessFreq;
         }
         else if (param == "min-ins") {
-            configFile >> minIns;
+            configFile >> minCom;
         }
         else if (param == "max-ins") {
-            configFile >> maxIns;
+            configFile >> maxCom;
         }
         else if (param == "delays-per-exec") {
             configFile >> delaysPerExec;
         }
     }
 
-    configureScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, minIns, maxIns, delaysPerExec);
-}
-
-void MainConsole::configureScheduler(int numCpu, const std::string& schedulerType, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec) {
-    // Set up CPUs and scheduler based on parsed configuration
     GlobalScheduler::getInstance()->setNumCpus(numCpu);
-    //GlobalScheduler::initialize(schedulerType, quantumCycles);
-    
-
-
-
-
-
-    // Set other parameters as needed
+    //GlobalScheduler::initialize(schedulerType, quantumCycles, minCom, maxCom);
 }
