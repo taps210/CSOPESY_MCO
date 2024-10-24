@@ -8,7 +8,7 @@ using namespace std;
 
 class Process {
 public:
-    
+
     enum ProcessState {
         READY,
         RUNNING,
@@ -23,11 +23,13 @@ public:
     void moveToNextLine();
 
     bool isFinished() const;
-    //int getRemainingTime() const;
+    int getRemainingTime();
     int getCommandCounter() const;
     int getLinesOfCode() const;
     int getPid() const;
     int getCpuCoreId() const;
+    void setRemainingTime(int _remainingTime);
+    void decrementRemainingTime();
     ProcessState getState() const;
     string getName() const;
     string getTimeCreated() const;
@@ -43,6 +45,7 @@ private:
 
     int commandCounter;
     int cpuCoreId = -1;
+    int remainingTime = 5;
     ProcessState currentState;
     string timeCreated;
 };

@@ -17,7 +17,8 @@ public:
 	std::shared_ptr<Process> findProcess(std::string processName);
 
 	// Week 6
-	void tick() const;
+	void tick();
+	void create10Processes();
 
 	// Week 7
 	std::string listProcesses() const;
@@ -34,4 +35,6 @@ private:
 	std::shared_ptr<AScheduler> scheduler;
 	std::unordered_map<string, std::shared_ptr<Process>> processes;
 	int j = 0;
+	int ticks;
+	int cpuCycles = 0;
 };

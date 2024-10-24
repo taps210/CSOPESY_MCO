@@ -40,12 +40,12 @@ void MainConsole::process() {
             std::cout << "Please run 'initialize' first.\n";
         }
         else if (args[0] == "screen" && args[1] == "-ls") {
-            //while (true) {
-                //system("cls");
-                //GlobalScheduler::getInstance()->listProcesses();
-                //std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            //}
-            std::cout << GlobalScheduler::getInstance()->listProcesses();
+            while (true) {
+                system("cls");
+                cout << GlobalScheduler::getInstance()->listProcesses();
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+            //std::cout << GlobalScheduler::getInstance()->listProcesses();
         }
         else if (args[0] == "screen") {
             if (args.size() != 3) {
@@ -156,7 +156,7 @@ void MainConsole::initializeSystem() {
 void MainConsole::configureScheduler(int numCpu, const std::string& schedulerType, int quantumCycles, int batchProcessFreq, int minIns, int maxIns, int delaysPerExec) {
     // Set up CPUs and scheduler based on parsed configuration
     GlobalScheduler::getInstance()->setNumCpus(numCpu);
-    GlobalScheduler::initialize(schedulerType, quantumCycles);
+    //GlobalScheduler::initialize(schedulerType, quantumCycles);
     
 
 

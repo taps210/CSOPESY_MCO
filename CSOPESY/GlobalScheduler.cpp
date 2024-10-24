@@ -1,5 +1,6 @@
 #include "GlobalScheduler.h"
 #include "FCFSScheduler.h"
+#include "RRScheduler.h"
 #include <memory>
 #include <iostream>
 #include <fstream>
@@ -12,7 +13,7 @@ GlobalScheduler::GlobalScheduler(std::string schedulerType, int quantumCycles) {
         scheduler = std::make_shared<FCFSScheduler>();
     }
     else if (schedulerType == "rr") {
-        //TODO: set value of scheduler and pass int quantumCycles
+        scheduler = std::make_shared<RRScheduler>(quantumCycles);
     }
     else {
         std::cerr << "Error: scheduler type does not exist" << std::endl;
@@ -38,10 +39,17 @@ GlobalScheduler* GlobalScheduler::getInstance() {
     return sharedInstance;
 }
 
-void GlobalScheduler::tick() const
-{
-    this->scheduler->execute();
+void GlobalScheduler::tick() {
+    ticks = ticks + 1;
 }
+
+// Week 6
+void GlobalScheduler::create10Processes() {
+    for (int i = 0; i < 10; i++) {
+        GlobalScheduler::getInstance()->createUniqueProcess("process_" + std::to_string(i));
+    }
+}
+
 
 std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string processName) {
     if (processes.find(processName) != processes.end()) {
@@ -74,6 +82,9 @@ void GlobalScheduler::createProcess() {
 std::string listOfProcess;
 
 std::string GlobalScheduler::listProcesses() const {
+    // For debugging only
+    cout << "CPU Cycles: " << std::to_string(cpuCycles) << "\n";
+
     listOfProcess = "";
     if (processes.empty()) {
         listOfProcess += "No processes found.\n";
@@ -92,7 +103,7 @@ std::string GlobalScheduler::listProcesses() const {
             listOfProcess += process->getName() + "\t(" +
                 process->getTimeCreated() + ")" +
                 "\tCore: " + coreIdOutput +
-                "\t" + std::to_string(currentLinesOfCode == 0 ? currentLinesOfCode : currentLinesOfCode + 1) +
+                "\t" + std::to_string(currentLinesOfCode < totalLinesOfCode ? currentLinesOfCode : currentLinesOfCode + 1) +
                 " / " + std::to_string(totalLinesOfCode) + "\n";
         }
     }
@@ -135,7 +146,15 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
 }
 
 void GlobalScheduler::run() {
-    this->scheduler->execute();
+    ticks = scheduler->schedulerWorkers.size();
+    while (true) {
+        sleep(100);
+        if (ticks == 4) {
+            ticks = 0;
+            this->cpuCycles++;
+            this->scheduler->execute();
+        }
+    }
 }
 
 void GlobalScheduler::setNumCpus(int numCpu) {

@@ -12,7 +12,7 @@ void SchedulerWorker::assignProcess(std::shared_ptr<Process> process) {
 }
 
 void SchedulerWorker::run() {
-    while (true) {
+    /*while (true) {
         if (currentProcess) {
             currentProcess->setState(currentProcess->RUNNING);
             currentProcess->setCpuCoreId(cpuCoreId);
@@ -25,9 +25,30 @@ void SchedulerWorker::run() {
             currentProcess = nullptr;
             running = false;
         }
+    }*/
+}
+
+void SchedulerWorker::tick() {
+    if (currentProcess) {
+        if (currentProcess->isFinished()) {
+            currentProcess = nullptr;
+            running = false;
+            GlobalScheduler::getInstance()->tick();
+            return;
+        }
+        currentProcess->setState(currentProcess->RUNNING);
+        currentProcess->setCpuCoreId(cpuCoreId);
+        currentProcess->executeCurrentCommand();
+        currentProcess->moveToNextLine();
+        currentProcess->decrementRemainingTime();
     }
+    GlobalScheduler::getInstance()->tick();
 }
 
 bool SchedulerWorker::isRunning() {
     return running;
+}
+
+std::shared_ptr<Process> SchedulerWorker::getProcess() {
+    return currentProcess;
 }
