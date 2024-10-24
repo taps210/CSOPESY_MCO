@@ -25,25 +25,25 @@ std::string getTimestamp() {
 
 
 void PrintCommand::execute(int cpuCoreId) {
-    std::string filename = "process_" + std::to_string(this->pid) + ".txt";
-    bool fileExists = std::filesystem::exists(filename);
-    std::ofstream out(filename, std::ios::app);
+    //std::string filename = "process_" + std::to_string(this->pid) + ".txt";
+    //bool fileExists = std::filesystem::exists(filename);
+    //std::ofstream out(filename, std::ios::app);
 
-    if (!out.is_open()) {
-        std::cerr << "Error: Could not open the file " << filename << " for writing." << std::endl;
-        return;
-    }
+    //if (!out.is_open()) {
+    //    std::cerr << "Error: Could not open the file " << filename << " for writing." << std::endl;
+    //    return;
+    //}
 
-    if (!fileExists) {
-        //std::cout << "File created: " << filename << std::endl;
-        out << "Process name: " << "process_" << this->pid << "\n";
-        out << "Logs:\n\n";
-    }
+    //if (!fileExists) {
+    //    //std::cout << "File created: " << filename << std::endl;
+    //    out << "Process name: " << "process_" << this->pid << "\n";
+    //    out << "Logs:\n\n";
+    //}
 
    
 
-    out << "(" << getTimestamp() << ") "
-        << "\tCore:" << cpuCoreId << "\t\t" << toPrint << "\n";
+    //out << "(" << getTimestamp() << ") "
+    //    << "\tCore:" << cpuCoreId << "\t\t" << toPrint << "\n";
 
-    out.close();
+    //out.close();
 }

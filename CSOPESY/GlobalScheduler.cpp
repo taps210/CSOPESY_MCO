@@ -9,10 +9,10 @@
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
 GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec) {
-    if (schedulerType == "fcfs") {
+    if (schedulerType == "\"fcfs\"") {
         scheduler = std::make_shared<FCFSScheduler>(numCpu);
     }
-    else if (schedulerType == "rr") {
+    else if (schedulerType == "\"rr\"") {
         scheduler = std::make_shared<RRScheduler>(numCpu, quantumCycles);
     }
     else {
