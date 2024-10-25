@@ -20,6 +20,7 @@ public:
 
 	void exitApplication();
 	bool isRunning();
+	std::shared_ptr<AConsole> findConsole(std::string consoleName);
 
 private:
 	ConsoleManager();

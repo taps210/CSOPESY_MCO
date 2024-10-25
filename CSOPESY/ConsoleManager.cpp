@@ -58,3 +58,11 @@ void ConsoleManager::exitApplication() {
 bool ConsoleManager::isRunning() {
 	return running;
 }
+
+std::shared_ptr<AConsole> ConsoleManager::findConsole(std::string consoleName) {
+	auto it = consoleTable.find(consoleName);
+	if (it != consoleTable.end()) {
+		return it->second;
+	}
+	return nullptr;
+}

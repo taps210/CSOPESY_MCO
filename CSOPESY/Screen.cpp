@@ -20,7 +20,7 @@ void Screen::onEnabled() {
 
 void Screen::process() {
     while (true) {
-        std::cout << "Enter a command: ";
+        std::cout << "root:\\\> ";
 
         string command;
         string word;
@@ -34,9 +34,11 @@ void Screen::process() {
 
         if (args[0] == "process-smi") {
             std::cout << "process-smi command recognized. Doing something.\n";
+            display();
         }
         else if (args[0] == "exit") {
             ConsoleManager::getInstance()->switchConsole(MAIN_CONSOLE);
+            break;
         }
         else {
             std::cout << args[0] + " command not recognized." << '\n';
@@ -46,10 +48,18 @@ void Screen::process() {
 
 void Screen::display() {
     if (attachedProcess) {
-        cout << "\n--- Screen for Process: " << attachedProcess->getName() << " ---\n";
-        cout << "Instruction: " << attachedProcess->getCommandCounter() << " / " << attachedProcess->getLinesOfCode() << endl;
-        cout << "Screen Created: " << timeCreated << endl;
-        cout << "-------------------------------------\n";
+        int currentLinesOfCode = attachedProcess->getCommandCounter();
+        int totalLinesOfCode = attachedProcess->getLinesOfCode();
+        cout << "\nProcess: " << attachedProcess->getName() << "\n\n";
+        //cout << "Screen Created: " << timeCreated << endl;
+
+        if (currentLinesOfCode + 1 == totalLinesOfCode) {
+            cout << "Finished!\n\n";
+        }   
+        else {
+            cout << "Current instruction line: " << std::to_string(currentLinesOfCode < totalLinesOfCode ? currentLinesOfCode : currentLinesOfCode + 1) << "\n";
+            cout << "Lines of code: " << std::to_string(totalLinesOfCode) << "\n\n";
+        }
     }
     else {
         cout << "No valid process associated with this screen.\n";

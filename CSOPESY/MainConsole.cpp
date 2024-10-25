@@ -49,20 +49,49 @@ void MainConsole::process() {
                 std::cout << "Invalid number of arguments for command screen.\n";
             }
             else if (args[1] == "-r") {
-                ConsoleManager::getInstance()->switchConsole(args[2]);
+                // Check if process exists
+                std::shared_ptr<Process> process = GlobalScheduler::getInstance()->findProcess(args[2]);
+                if (!process || process->isFinished()) {
+                    std::cout << "Process " << args[2] << " not found.";
+                }
+                else {
+                    // Check if screen for that process already exists 
+                    std::shared_ptr<AConsole> screen = ConsoleManager::getInstance()->findConsole(args[2]);
+                    if (!screen) { // If no
+                        // Create a screen
+                        const std::shared_ptr<Screen> screen = std::make_shared<Screen>(process);
+                        ConsoleManager::getInstance()->registerScreen(screen);
+
+                        // Switch to created screen
+                        ConsoleManager::getInstance()->switchConsole(args[2]);
+                    }
+                    else {
+                        // Just switch to existing screen
+                        ConsoleManager::getInstance()->switchConsole(args[2]);
+                    }
+                }
+                
                 break;
             }
             else if (args[1] == "-s") {
-                const std::shared_ptr<Process> process = std::make_shared<Process>(1, args[2]);
-                const std::shared_ptr<Screen> screen = std::make_shared<Screen>(process);
-
-                try {
-                    ConsoleManager::getInstance()->registerScreen(screen);
-                    ConsoleManager::getInstance()->switchConsole(args[2]);
-                    break;
+                // Check if process exists
+                std::shared_ptr<Process> p = GlobalScheduler::getInstance()->findProcess(args[2]);
+                if (p) {
+                    // If process exists, can't create a new process with that name.
+                    std::cout << "Process " << args[2] << " already exists\n";
                 }
-                catch (const std::exception& e) {
-                    std::cout << e.what();
+                else {
+                    const std::shared_ptr<Process> process = std::make_shared<Process>(1, args[2]);
+                    const std::shared_ptr<Screen> screen = std::make_shared<Screen>(process);
+
+                    try {
+                        ConsoleManager::getInstance()->registerScreen(screen);
+                        ConsoleManager::getInstance()->switchConsole(args[2]);
+                        break;
+                    }
+                    catch (const std::exception& e) {
+                        std::cout << e.what();
+                    }
                 }
             }
             else {

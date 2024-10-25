@@ -66,6 +66,9 @@
     <ClCompile Include="SchedulerWorker.cpp">
       <Filter>CPU</Filter>
     </ClCompile>
+    <ClCompile Include="RRScheduler.cpp">
+      <Filter>CPU</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleManager.h">
@@ -102,6 +105,9 @@
       <Filter>CPU</Filter>
     </ClInclude>
     <ClInclude Include="SchedulerWorker.h">
+      <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="RRScheduler.h">
       <Filter>CPU</Filter>
     </ClInclude>
   </ItemGroup>
