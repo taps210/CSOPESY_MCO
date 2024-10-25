@@ -2,7 +2,7 @@
 #include <iostream>
 
 AScheduler::AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo)
-    : schedulingAlgo(schedulingAlgo) {
+    : schedulingAlgo(schedulingAlgo), workersCount(numCpu) {
     for (int i = 0; i < numCpu; i++) {
         // Initialize worker
         auto worker = std::make_shared<SchedulerWorker>(i);
@@ -25,6 +25,17 @@ void AScheduler::addProcess(std::shared_ptr<Process> process) {
 //    }
 //    return nullptr;
 //}
+
+int AScheduler::getAvailableCores() {
+    int availableCores = 0;
+    for (int i = 0; i < schedulerWorkers.size(); i++) {
+        if (!schedulerWorkers[i]->isRunning()) {
+            availableCores++;
+        }
+    }
+
+    return availableCores;
+}
 
 void AScheduler::run() {
     init();
