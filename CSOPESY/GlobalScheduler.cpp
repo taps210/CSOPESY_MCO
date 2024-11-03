@@ -164,15 +164,14 @@ void GlobalScheduler::run() {
     ticks = scheduler->schedulerWorkers.size();
     int processCounter = 0;
     int execCounter = 0;
-
     while (true) {
+        sleep(1);
         if (ticks == workers) {
             ticks = 0;
-            this->cpuCycles++;
             processCounter++;
             execCounter++;
 
-            if (execCounter >= execDelay) {
+            if (execCounter >= execDelay) {    
                 this->scheduler->execute();
                 execCounter = 0;
             }
