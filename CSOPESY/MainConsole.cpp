@@ -81,10 +81,10 @@ void MainConsole::process() {
                     std::cout << "Process " << args[2] << " already exists\n";
                 }
                 else {
-                    const std::shared_ptr<Process> process = std::make_shared<Process>(1, args[2]);
+                    const std::shared_ptr<Process> process = GlobalScheduler::getInstance()->createUniqueProcess(args[2]);
                     const std::shared_ptr<Screen> screen = std::make_shared<Screen>(process);
 
-                    try {
+                    try {                        
                         ConsoleManager::getInstance()->registerScreen(screen);
                         ConsoleManager::getInstance()->switchConsole(args[2]);
                         break;
