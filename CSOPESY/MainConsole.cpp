@@ -145,11 +145,11 @@ void MainConsole::configureSystem() {
     std::string param;
     int numCpu = 1;
     std::string schedulerType;
-    int quantumCycles = 1;
-    int batchProcessFreq = 1;
-    int minCom = 1;
-    int maxCom = 1;
-    int delaysPerExec = 0;
+    unsigned long int quantumCycles = 1;
+    unsigned long int batchProcessFreq = 1;
+    unsigned long int minCom = 1;
+    unsigned long int maxCom = 1;
+    unsigned long int delaysPerExec = 0;
 
     while (configFile >> param) {
         if (param == "num-cpu") {
