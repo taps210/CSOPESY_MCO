@@ -171,7 +171,7 @@ void MainConsole::configureSystem() {
         else if (param == "max-ins") {
             configFile >> maxCom;
         }
-        else if (param == "delays-per-exec") {
+        else if (param == "delay-per-exec") {
             configFile >> delaysPerExec;
         }
     }
