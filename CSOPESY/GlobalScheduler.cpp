@@ -95,17 +95,17 @@ std::string GlobalScheduler::listProcesses() const {
     // For debugging only
     int availableCores = scheduler->getAvailableCores();
     float utilization =  ((workers - availableCores) / workers) * 100;
-    cout << "CPU Cycles: " << std::to_string(cpuCycles) << "\n";
-    cout << "CPU Utilization: " << utilization << "%\n";
-    cout << "Cores used: " << workers - availableCores << "\n";
-    cout << "Cores available: " << availableCores << "\n";
+    //cout << "CPU Cycles: " << std::to_string(cpuCycles) << "\n";
+   
 
     listOfProcess = "";
     if (processes.empty()) {
         listOfProcess += "No processes found.\n";
         return listOfProcess;
     }
-
+    listOfProcess += "CPU Utilization: " + std::to_string(static_cast<int>(utilization)) + "%\n";
+    listOfProcess += "Cores used: " + std::to_string(workers - availableCores) + "\n";
+    listOfProcess += "Cores available: " + std::to_string(availableCores) + "\n";
     listOfProcess += ("------------------------------------------\n");
     listOfProcess += "Running processes:\n";
 

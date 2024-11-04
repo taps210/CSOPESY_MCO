@@ -33,7 +33,7 @@ void Screen::process() {
         }
 
         if (args[0] == "process-smi") {
-            std::cout << "process-smi command recognized. Doing something.\n";
+            //std::cout << "process-smi command recognized. Doing something.\n";
             display();
         }
         else if (args[0] == "exit") {

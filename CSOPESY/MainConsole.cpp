@@ -101,11 +101,11 @@ void MainConsole::process() {
         }
         else if (args[0] == "scheduler-test") {
             GlobalScheduler::getInstance()->setTester(true);
-            std::cout << "scheduler-test command recognized. Doing something.\n";
+            //std::cout << "scheduler-test command recognized. Doing something.\n";
         }
         else if (args[0] == "scheduler-stop") {
             GlobalScheduler::getInstance()->setTester(false);
-            std::cout << "scheduler-stop command recognized. Doing something.\n";
+            //std::cout << "scheduler-stop command recognized. Doing something.\n";
         }
         else if (args[0] == "report-util") {
             GlobalScheduler::getInstance()->logProcess();
