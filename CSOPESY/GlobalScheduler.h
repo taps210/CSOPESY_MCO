@@ -9,7 +9,7 @@
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec);
+	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec);
 	static void destroy();
 	void run() override;
 
@@ -27,7 +27,7 @@ public:
 	bool getTester();
 
 private:
-	GlobalScheduler(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec);
+	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}
@@ -36,11 +36,11 @@ private:
 	std::unordered_map<string, std::shared_ptr<Process>> processes;
 	int j = 0;
 	int ticks;
-	int cpuCycles = 0;
-	int minCom = 0;
-	int maxCom = 0;
+	unsigned long int cpuCycles = 0;
+	unsigned long int minCom = 0;
+	unsigned long int maxCom = 0;
 	bool tester = false;
 	int workers;
-	int processFreq;
-	int execDelay;
+	unsigned long int processFreq;
+	unsigned long int execDelay;
 };

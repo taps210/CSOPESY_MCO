@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "Process.h"
-#include "PrintCommand.h"
 #include <chrono>
 
 std::string getCurrentTimestamp() {
@@ -24,32 +23,21 @@ Process::Process(int pid, string name)
     : pid(pid), name(name), commandCounter(0), currentState(READY), timeCreated(getCurrentTimestamp()),remainingTime(5){}
 
 // Adds a new command to the process
-void Process::addCommand(ICommand::CommandType commandType) {
-    std::shared_ptr<ICommand> newCommand;
-
-    // Use the concrete subclasses based on the command type
-    switch (commandType) {
-    case ICommand::PRINT:
-        newCommand = std::make_shared<PrintCommand>(pid, + "Hello, world from " + getName() + "!");
-        break;
-    default:
-        std::cout << "Invalid argument";
-    }
-
+void Process::setCommands(unsigned long int numOfCommands) {
     // Add the new command to the command list
-    commandList.push_back(newCommand);
+    commands = numOfCommands;
 }
 
 // Executes the current command and updates the process state accordingly
 void Process::executeCurrentCommand() const {
-    if (commandCounter < commandList.size() && currentState == RUNNING) {
-        commandList[commandCounter]->execute(cpuCoreId);
+    if (commandCounter < commands && currentState == RUNNING) {
+        //commandList[commandCounter]->execute(cpuCoreId);
     }
 }
 
 // Moves to the next command in the list
 void Process::moveToNextLine() {
-    if (commandCounter < commandList.size() - 1) {
+    if (commandCounter < commands) {
         commandCounter++;
     }
     else {
@@ -61,12 +49,12 @@ bool Process::isFinished() const {
     return currentState == FINISHED;
 }
 
-int Process::getCommandCounter() const {
+unsigned long int Process::getCommandCounter() const {
     return commandCounter;
 }
 
-int Process::getLinesOfCode() const {
-    return commandList.size();
+unsigned long int Process::getLinesOfCode() const {
+    return commands;
 }
 
 int Process::getPid() const {

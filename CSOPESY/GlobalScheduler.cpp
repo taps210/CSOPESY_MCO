@@ -8,7 +8,7 @@
 #include <string>
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec) {
+GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec) {
     if (schedulerType == "\"fcfs\"") {
         scheduler = std::make_shared<FCFSScheduler>(numCpu);
     }
@@ -30,7 +30,7 @@ GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, int quan
     scheduler->start();
 }
 
-void GlobalScheduler::initialize(int numCpu, std::string schedulerType, int quantumCycles, int batchProcessFreq, int min, int max, int delaysPerExec)
+void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec)
 {
     if (sharedInstance == nullptr) {
         sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec);
@@ -63,12 +63,10 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     // Week 7
     int i = 0;
     std::srand(static_cast<unsigned int>(std::time(0)));
-    int commands = minCom + std::rand() % (maxCom - minCom + 1);
+    unsigned long int commands = minCom + std::rand() % (maxCom - minCom + 1);
 
     if (commands >= minCom && commands <= maxCom) {
-        for (int i = 0; i < commands; i++) {
-            newProcess->addCommand(ICommand::PRINT);
-        }
+            newProcess->setCommands(commands);
     } else {
         std::cerr << "Error: Number of commands is not within the min/max bounds" << std::endl;
     }
@@ -112,8 +110,8 @@ std::string GlobalScheduler::listProcesses() const {
     for (const auto& p : processes) {
         auto process = p.second;
         if (!process->isFinished()) {
-            int currentLinesOfCode = process->getCommandCounter();
-            int totalLinesOfCode = process->getLinesOfCode();
+            unsigned long int currentLinesOfCode = process->getCommandCounter();
+            unsigned long int totalLinesOfCode = process->getLinesOfCode();
             std::string coreIdOutput = (process->getCpuCoreId() == -1) ? "N/A" : std::to_string(process->getCpuCoreId());
             listOfProcess += process->getName() + "\t(" +
                 process->getTimeCreated() + ")" +
@@ -162,8 +160,8 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
 
 void GlobalScheduler::run() {
     ticks = scheduler->schedulerWorkers.size();
-    int processCounter = 0;
-    int execCounter = 0;
+    unsigned long int processCounter = 0;
+    unsigned long int execCounter = 0;
     while (true) {
         sleep(1);
         if (ticks == workers) {

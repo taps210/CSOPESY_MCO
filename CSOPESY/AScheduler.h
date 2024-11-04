@@ -32,16 +32,6 @@ public:
 	virtual void init() = 0;
 	virtual void execute() = 0;
 
-	struct ProcessInfo {
-		int pid;
-		std::string name;
-		typedef std::vector<std::shared_ptr<ICommand>> CommandList;
-		CommandList commandList;
-		int commandCounter;
-		int cpuCoreId;
-		Process::ProcessState currentState;
-	};
-
 	friend class GlobalScheduler;
 
 

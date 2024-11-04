@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 
-#include "ICommand.h"
 using namespace std;
 
 class Process {
@@ -18,14 +17,14 @@ public:
 
     Process(int pid, string name);
 
-    void addCommand(ICommand::CommandType commandType);
+    void setCommands(unsigned long int numOfCommands);
     void executeCurrentCommand() const;
     void moveToNextLine();
 
     bool isFinished() const;
     int getRemainingTime();
-    int getCommandCounter() const;
-    int getLinesOfCode() const;
+    unsigned long int getCommandCounter() const;
+    unsigned long int getLinesOfCode() const;
     int getPid() const;
     int getCpuCoreId() const;
     void setRemainingTime(int _remainingTime);
@@ -40,10 +39,9 @@ public:
 private:
     int pid;
     string name;
-    typedef std::vector<std::shared_ptr<ICommand>> CommandList;
-    CommandList commandList;
+    unsigned long int commands = 0;
 
-    int commandCounter;
+    unsigned long int commandCounter;
     int cpuCoreId = -1;
     int remainingTime = 5;
     ProcessState currentState;
