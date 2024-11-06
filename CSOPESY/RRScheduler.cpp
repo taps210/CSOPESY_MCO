@@ -25,7 +25,7 @@ void RRScheduler::execute() {
 	std::shared_ptr<SchedulerWorker> worker = nullptr;
 	// Preempt
 	for (int i = 0; i < 4; i++) {
-		if (schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
+		if (i  < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
 			readyQueue.push(schedulerWorkers[i]->getProcess());
 			schedulerWorkers[i]->assignProcess(nullptr);
 			schedulerWorkers[i]->update(false);
@@ -42,6 +42,8 @@ void RRScheduler::execute() {
 
 	// Execute
 	for (int i = 0; i < schedulerWorkers.size(); i++) {
-		schedulerWorkers[i]->tick();
+		if (i < schedulerWorkers.size()) {
+			schedulerWorkers[i]->tick();
+		}
 	}
 }
