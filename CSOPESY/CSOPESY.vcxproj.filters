@@ -25,6 +25,9 @@
     <Filter Include="CPU">
       <UniqueIdentifier>{4dc26ea1-de94-42db-b95d-a5e5315423c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{68f98359-cdcf-4603-8047-5c00b41faf33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSOPESY.cpp">
@@ -48,12 +51,6 @@
     <ClCompile Include="CSOPESYThread.cpp">
       <Filter>Threading</Filter>
     </ClCompile>
-    <ClCompile Include="ICommand.cpp">
-      <Filter>Process</Filter>
-    </ClCompile>
-    <ClCompile Include="PrintCommand.cpp">
-      <Filter>Process</Filter>
-    </ClCompile>
     <ClCompile Include="AScheduler.cpp">
       <Filter>CPU</Filter>
     </ClCompile>
@@ -68,6 +65,12 @@
     </ClCompile>
     <ClCompile Include="RRScheduler.cpp">
       <Filter>CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="FlatMemoryAllocator.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="IMemoryAllocator.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,12 +92,6 @@
     <ClInclude Include="CSOPESYThread.h">
       <Filter>Threading</Filter>
     </ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>Process</Filter>
-    </ClInclude>
-    <ClInclude Include="PrintCommand.h">
-      <Filter>Process</Filter>
-    </ClInclude>
     <ClInclude Include="AScheduler.h">
       <Filter>CPU</Filter>
     </ClInclude>
@@ -109,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="RRScheduler.h">
       <Filter>CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="FlatMemoryAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="IMemoryAllocator.h">
+      <Filter>Memory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

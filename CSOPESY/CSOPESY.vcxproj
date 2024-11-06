@@ -134,7 +134,9 @@
     <ClCompile Include="CSOPESY.cpp" />
     <ClCompile Include="CSOPESYThread.cpp" />
     <ClCompile Include="FCFSScheduler.cpp" />
+    <ClCompile Include="FlatMemoryAllocator.cpp" />
     <ClCompile Include="GlobalScheduler.cpp" />
+    <ClCompile Include="IMemoryAllocator.cpp" />
     <ClCompile Include="MainConsole.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="RRScheduler.cpp" />
@@ -147,7 +149,9 @@
     <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="CSOPESYThread.h" />
     <ClInclude Include="FCFSScheduler.h" />
+    <ClInclude Include="FlatMemoryAllocator.h" />
     <ClInclude Include="GlobalScheduler.h" />
+    <ClInclude Include="IMemoryAllocator.h" />
     <ClInclude Include="MainConsole.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="RRScheduler.h" />

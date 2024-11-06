@@ -94,3 +94,7 @@ void Process::setRemainingTime(int _remainingTime) {
 void Process::decrementRemainingTime() {
     this->remainingTime--;
 }
+
+size_t Process::getMemoryRequired() {
+    return this->memoryRequired;
+}

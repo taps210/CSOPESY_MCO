@@ -36,6 +36,8 @@ public:
     void setState(Process::ProcessState processState);
     void setCpuCoreId(int _cpuCoreId);
 
+    size_t getMemoryRequired();
+
 private:
     int pid;
     string name;
@@ -46,4 +48,6 @@ private:
     int remainingTime = 5;
     ProcessState currentState;
     string timeCreated;
+
+    size_t memoryRequired = 1;
 };
