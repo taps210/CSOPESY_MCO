@@ -2,6 +2,8 @@
 #include <string>
 #include <queue>
 
+#include "FlatMemoryAllocator.h"
+#include "IMemoryAllocator.h"
 #include "CSOPESYThread.h"
 #include "Process.h"
 #include "SchedulerWorker.h"
@@ -21,7 +23,7 @@ public:
 		ROUND_ROBIN
 	};
 
-	AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo);
+	AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo, std::shared_ptr<FlatMemoryAllocator> memoryAllocator);
 
 	void addProcess(std::shared_ptr<Process> process);
 	//std::shared_ptr<Process> findProcess(std::string processName);
@@ -42,5 +44,5 @@ protected:
 	std::vector<std::shared_ptr<Process>> processes;
 	std::queue<std::shared_ptr<Process>> readyQueue;
 	std::vector<std::shared_ptr<SchedulerWorker>> schedulerWorkers;
-	//std::shared_ptr<IMemoryAllocator> memoryAllocator;
+	std::shared_ptr<FlatMemoryAllocator> memoryAllocator;
 };

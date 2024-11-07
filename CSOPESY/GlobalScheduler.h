@@ -10,7 +10,7 @@
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, FlatMemoryAllocator* allocator);
+	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator);
 	static void destroy();
 	void run() override;
 
@@ -29,7 +29,7 @@ public:
 	bool getTester();
 
 private:
-	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, FlatMemoryAllocator* allocator);
+	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}
@@ -46,5 +46,5 @@ private:
 	unsigned long int processFreq;
 	unsigned long int execDelay;
 	unsigned long int timeQuantum;
-	FlatMemoryAllocator* memoryAllocator;
+	std::shared_ptr<FlatMemoryAllocator> memoryAllocator;
 };

@@ -1,6 +1,7 @@
 #include "GlobalScheduler.h"
 #include "FCFSScheduler.h"
 #include "RRScheduler.h"
+
 #include <memory>
 #include <iostream>
 #include <fstream>
@@ -24,13 +25,13 @@ std::string getTimestamp() {
 }
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, FlatMemoryAllocator* allocator)
+GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator)
     : workers(numCpu), timeQuantum(quantumCycles), processFreq(batchProcessFreq), minCom(min), maxCom(max), execDelay(delaysPerExec), memoryAllocator(allocator) {
     if (schedulerType == "\"fcfs\"") {
-        scheduler = std::make_shared<FCFSScheduler>(numCpu);
+        scheduler = std::make_shared<FCFSScheduler>(numCpu, allocator);
     }
     else if (schedulerType == "\"rr\"") {
-        scheduler = std::make_shared<RRScheduler>(numCpu, quantumCycles);
+        scheduler = std::make_shared<RRScheduler>(numCpu, quantumCycles, allocator);
     }
     else {
         std::cerr << "Error: scheduler type does not exist" << std::endl;
@@ -41,7 +42,7 @@ GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned
 
 }
 
-void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, FlatMemoryAllocator* allocator)
+void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator)
 {
     if (sharedInstance == nullptr) {
         sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec, allocator);
@@ -204,7 +205,7 @@ void GlobalScheduler::run() {
     unsigned long int quantumCounter = 0;
     while (true) {
 
-        sleep(400);
+        sleep(100);
         if (ticks == workers) {
             ticks = 0;
             processCounter++;
@@ -224,7 +225,7 @@ void GlobalScheduler::run() {
             }
 
             if (quantumCounter >= timeQuantum) {
-                //GlobalScheduler::getInstance()->logMemory();
+                GlobalScheduler::getInstance()->logMemory();
                 quantumCounter = 0;
             }
         }

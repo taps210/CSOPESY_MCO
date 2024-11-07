@@ -177,7 +177,7 @@ void MainConsole::configureSystem() {
         }
     }
 
-    FlatMemoryAllocator* allocator = new FlatMemoryAllocator(16384);
+    std::shared_ptr<FlatMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(16384);
 
     GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec, allocator);
 }

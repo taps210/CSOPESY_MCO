@@ -1,8 +1,9 @@
 #include "AScheduler.h"
+#include "FlatMemoryAllocator.h"
 #include <iostream>
 
-AScheduler::AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo)
-    : schedulingAlgo(schedulingAlgo), workersCount(numCpu) {
+AScheduler::AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo, std::shared_ptr<FlatMemoryAllocator> memoryAllocator)
+    : schedulingAlgo(schedulingAlgo), workersCount(numCpu), memoryAllocator(memoryAllocator) {
     for (int i = 0; i < numCpu; i++) {
         // Initialize worker
         auto worker = std::make_shared<SchedulerWorker>(i);

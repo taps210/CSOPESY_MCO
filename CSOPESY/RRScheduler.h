@@ -6,7 +6,7 @@
 
 class RRScheduler : public AScheduler {
 public:
-    RRScheduler(int numCpu, int timeQuantum);
+    RRScheduler(int numCpu, int timeQuantum, std::shared_ptr<FlatMemoryAllocator> memoryAllocator);
 
     void init() override;
     void execute() override;
@@ -16,5 +16,4 @@ private:
     int counter = 0;
     int timeQuantum;
     const size_t maximumMemorySize = 16384;
-    FlatMemoryAllocator memoryAllocator = FlatMemoryAllocator(maximumMemorySize);
 };

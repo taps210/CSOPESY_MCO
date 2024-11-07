@@ -1,10 +1,11 @@
 #include "RRScheduler.h"
 #include "SchedulerWorker.h"
+#include "FlatMemoryAllocator.h"
 #include <iostream>
 #include <memory>
 
-RRScheduler::RRScheduler(int numCpu, int timeQuantum)
-	: AScheduler(numCpu, SchedulingAlgorithm::ROUND_ROBIN), timeQuantum(timeQuantum) {
+RRScheduler::RRScheduler(int numCpu, int timeQuantum, std::shared_ptr<FlatMemoryAllocator> memoryAllocator)
+	: AScheduler(numCpu, SchedulingAlgorithm::ROUND_ROBIN, memoryAllocator), timeQuantum(timeQuantum) {
 }
 
 void RRScheduler::init() {
@@ -33,14 +34,14 @@ void RRScheduler::execute() {
 			readyQueue.push(schedulerWorkers[i]->getProcess());
 			schedulerWorkers[i]->assignProcess(nullptr);
 			schedulerWorkers[i]->update(false);
-			memoryAllocator.deallocate(process->getMemoryPtr(), process->getMemoryRequired());
+			memoryAllocator->deallocate(process->getMemoryPtr(), process->getMemoryRequired());
 			process->setMemoryPtr(nullptr);
 		}
 	}
 	
 	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
-		void* memory = memoryAllocator.allocate(currentProcess->getMemoryRequired());
+		void* memory = memoryAllocator->allocate(currentProcess->getMemoryRequired());
 		//cout << memoryAllocator.visualizeMemory();
 		//cout << "Memory: " << memory << endl;
 		if (memory != nullptr) {

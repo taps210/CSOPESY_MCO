@@ -1,9 +1,10 @@
 #include "FCFSScheduler.h"
 #include "SchedulerWorker.h"
+#include "FlatMemoryAllocator.h"
 #include <iostream>
 
-FCFSScheduler::FCFSScheduler(int numCpu)
-	: AScheduler(numCpu, SchedulingAlgorithm::FCFS) {
+FCFSScheduler::FCFSScheduler(int numCpu, std::shared_ptr<FlatMemoryAllocator> memoryAllocator)
+	: AScheduler(numCpu, SchedulingAlgorithm::FCFS, memoryAllocator) {
 }
 
 void FCFSScheduler::init() {
