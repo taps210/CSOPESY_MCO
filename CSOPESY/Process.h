@@ -37,6 +37,9 @@ public:
     void setCpuCoreId(int _cpuCoreId);
 
     size_t getMemoryRequired();
+    void* getMemoryPtr();
+    void setMemoryRequired(size_t size);
+    void setMemoryPtr(void* ptr);
 
 private:
     int pid;
@@ -50,4 +53,5 @@ private:
     string timeCreated;
 
     size_t memoryRequired = 16;
+    void* memoryPtr = nullptr;
 };

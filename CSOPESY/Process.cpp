@@ -98,3 +98,15 @@ void Process::decrementRemainingTime() {
 size_t Process::getMemoryRequired() {
     return this->memoryRequired;
 }
+
+void* Process::getMemoryPtr() {
+    return this->memoryPtr;
+}
+
+void Process::setMemoryRequired(size_t size) {
+    memoryRequired = size;
+}
+
+void Process::setMemoryPtr(void* ptr) {
+    memoryPtr = ptr;
+}

@@ -1,6 +1,7 @@
 #include "RRScheduler.h"
 #include "SchedulerWorker.h"
 #include <iostream>
+#include <memory>
 
 RRScheduler::RRScheduler(int numCpu, int timeQuantum)
 	: AScheduler(numCpu, SchedulingAlgorithm::ROUND_ROBIN), timeQuantum(timeQuantum) {
@@ -22,13 +23,18 @@ std::shared_ptr<SchedulerWorker> RRScheduler::findAvailableWorker() {
 }
 
 void RRScheduler::execute() {
+	//cout << memoryAllocator.visualizeMemory();
+
 	std::shared_ptr<SchedulerWorker> worker = nullptr;
 	// Preempt
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < schedulerWorkers.size(); i++) {
 		if (i  < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
+			std::shared_ptr<Process> process = schedulerWorkers[i]->getProcess();
 			readyQueue.push(schedulerWorkers[i]->getProcess());
 			schedulerWorkers[i]->assignProcess(nullptr);
 			schedulerWorkers[i]->update(false);
+			memoryAllocator.deallocate(process->getMemoryPtr(), process->getMemoryRequired());
+			process->setMemoryPtr(nullptr);
 		}
 	}
 	
@@ -36,7 +42,7 @@ void RRScheduler::execute() {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
 		void* memory = memoryAllocator.allocate(currentProcess->getMemoryRequired());
 		//cout << memoryAllocator.visualizeMemory();
-
+		//cout << "Memory: " << memory << endl;
 		if (memory != nullptr) {
 			//std::cout << "Memory: " << memory << "\n";
 			//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
@@ -45,6 +51,7 @@ void RRScheduler::execute() {
 			readyQueue.pop();
 			worker->update(true);
 			worker->assignProcess(currentProcess);
+			currentProcess->setMemoryPtr(memory);
 		}
 		else {
 			//std::cout << "Insufficient memory for process \n";

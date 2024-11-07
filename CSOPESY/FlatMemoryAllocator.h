@@ -39,12 +39,13 @@ public:
         return nullptr;
     }
 
-    void deallocate(void* ptr) override {
+    void deallocate(void* ptr, size_t size) override {
         // Find the index of the memory block to deallocate
         size_t index = static_cast<char*>(ptr) - &memory[0];
         if (allocationMap[index]) {
-            deallocateAt(index);
+            deallocateAt(index, size);
         }
+        cout << "Deallocated. New size: " << allocatedSize;
     }
 
     std::string visualizeMemory() override {
@@ -82,7 +83,10 @@ private:
         allocatedSize += size;
     }
 
-    void deallocateAt(size_t index) {
-        allocationMap[index] = false;
+    void deallocateAt(size_t index, size_t size) {
+        for (size_t i = index; i < index + size; ++i) {
+            allocationMap[i] = false;
+        }
+        allocatedSize -= size;
     }
 };
