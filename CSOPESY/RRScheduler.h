@@ -1,6 +1,7 @@
 #pragma once
 #include "AScheduler.h"
 #include <queue>
+#include "IMemoryAllocator.h"
 #include "FlatMemoryAllocator.h"
 
 class RRScheduler : public AScheduler {
@@ -15,5 +16,5 @@ private:
     int counter = 0;
     int timeQuantum;
     const size_t maximumMemorySize = 50;
-    FlatMemoryAllocator* memoryAllocator = new FlatMemoryAllocator(maximumMemorySize);
+    FlatMemoryAllocator memoryAllocator = FlatMemoryAllocator(maximumMemorySize);
 };

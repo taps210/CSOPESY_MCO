@@ -49,5 +49,5 @@ private:
     ProcessState currentState;
     string timeCreated;
 
-    size_t memoryRequired = 1;
+    size_t memoryRequired = 16;
 };

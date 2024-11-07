@@ -1,6 +1,6 @@
+#pragma once
 #include <string>
 
-#pragma once
 class IMemoryAllocator {
 public:
 	virtual void* allocate(size_t size) = 0;

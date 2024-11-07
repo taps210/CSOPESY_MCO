@@ -26,31 +26,30 @@ void RRScheduler::execute() {
 	// Preempt
 	for (int i = 0; i < 4; i++) {
 		if (i  < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
-			void* memory = memoryAllocator->allocate(schedulerWorkers[i]->getProcess()->getMemoryRequired());
-
-			if (memory != nullptr) {
-				std::cout << "Allocated Memory!\n";
-				;
-				readyQueue.push(schedulerWorkers[i]->getProcess());
-				schedulerWorkers[i]->assignProcess(nullptr);
-				schedulerWorkers[i]->update(false);
-
-			}
-			else {
-				std::cout << "Insufficient memory for process \n";
-			}
-			//readyQueue.push(schedulerWorkers[i]->getProcess());
-			//schedulerWorkers[i]->assignProcess(nullptr);
-			//schedulerWorkers[i]->update(false);
+			readyQueue.push(schedulerWorkers[i]->getProcess());
+			schedulerWorkers[i]->assignProcess(nullptr);
+			schedulerWorkers[i]->update(false);
 		}
 	}
-
+	
 	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
-		currentProcess->setRemainingTime(timeQuantum);
-		readyQueue.pop();
-		worker->update(true);
-		worker->assignProcess(currentProcess);
+		void* memory = memoryAllocator.allocate(currentProcess->getMemoryRequired());
+		//cout << memoryAllocator.visualizeMemory();
+
+		if (memory != nullptr) {
+			//std::cout << "Memory: " << memory << "\n";
+			//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
+			std::shared_ptr<Process> currentProcess = readyQueue.front();
+			currentProcess->setRemainingTime(timeQuantum);
+			readyQueue.pop();
+			worker->update(true);
+			worker->assignProcess(currentProcess);
+		}
+		else {
+			//std::cout << "Insufficient memory for process \n";
+			break;
+		}
 	}
 
 	// Execute

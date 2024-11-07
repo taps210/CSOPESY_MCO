@@ -1,12 +1,16 @@
+#pragma once
 #include "IMemoryAllocator.h"
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
+#include <iostream>
 
-class FlatMemoryAllocator : public IMemoryAllocator {
+class FlatMemoryAllocator : IMemoryAllocator {
 public:
-    FlatMemoryAllocator(size_t maximumSize) : maximumSize(maximumSize), allocatedSize(0) {
-        memory.reserve(maximumSize);
-        initializeMemory();
+    FlatMemoryAllocator(size_t maximumSize) : maximumSize(maximumSize), allocatedSize(0), memory(maximumSize, '.') {
+        for (size_t i = 0; i < maximumSize; ++i) {
+            allocationMap[i] = false;
+        }
     }
 
     ~FlatMemoryAllocator() {
@@ -15,14 +19,23 @@ public:
 
     void* allocate(size_t size) override {
         // Find the first available block that can accommodate the process
+        //cout << "\nSize to Allocate: " << size << endl;
         for (size_t i = 0; i < maximumSize - size + 1; ++i) {
-            if (allocationMap[i] && canAllocateAt(i, size)) {
+            
+            //cout << "memory size: " << memory.size() << endl;
+            //cout << "i: " << i << endl;
+            //cout << "AllocationMap: " << allocationMap[i] << endl;
+            //cout << "Can Allocated?: " << canAllocateAt(i, size) << endl;
+
+            if (!allocationMap[i] && canAllocateAt(i, size)) {
+                //cout << "Allocating...\n" << endl;
                 allocateAt(i, size);
                 return &memory[i];
             }
         }
 
         // No available block found, return nullptr
+        //cout << "Returning null\n\n" ;
         return nullptr;
     }
 
@@ -35,7 +48,7 @@ public:
     }
 
     std::string visualizeMemory() override {
-        return std::string(memory.begin(), memory.end());
+        return std::to_string(allocatedSize);
     }
 
 private:
@@ -45,23 +58,31 @@ private:
     std::unordered_map<size_t, bool> allocationMap;
 
     void initializeMemory() {
-        std::fill(memory.begin(), memory.end(), '.'); // '.' represents unallocated memory
-        std::fill(allocationMap.begin(), allocationMap.end(), false);
+        std::fill(memory.begin(), memory.end(), '.'); // Reset memory to unallocated
+        allocationMap.clear(); // Clear existing entries
+        for (size_t i = 0; i < maximumSize; ++i) {
+            allocationMap[i] = false;
+        }
     }
 
     bool canAllocateAt(size_t index, size_t size) const {
-        // Check if the memory block is large enough
-        return (index + size <= maximumSize);
+        if (index + size > maximumSize) return false;
+        for (size_t i = index; i < index + size; ++i) {
+            if (allocationMap.find(i) != allocationMap.end() && allocationMap.at(i)) {
+                return false;  // If any part of the block is already allocated, return false
+            }
+        }
+        return true;
     }
 
     void allocateAt(size_t index, size_t size) {
-        // Mark the memory block as allocated
-        std::fill(allocationMap.begin()->first + index, allocationMap.begin()->first + index + size, true);
+        for (size_t i = index; i < index + size; ++i) {
+            allocationMap[i] = true;
+        }
         allocatedSize += size;
     }
 
     void deallocateAt(size_t index) {
-        // Mark the memory block as deallocated
         allocationMap[index] = false;
     }
 };
