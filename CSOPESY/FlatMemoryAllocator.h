@@ -57,15 +57,19 @@ public:
         // Iterate through memory and print process IDs or free space
         size_t currentAddress = maximumSize;
         for (size_t i = 0; i < memory.size(); ++i) {
-            if (allocationMap[i] && currentAddress >= 0) {
+            if (currentAddress == 0) {
+                break;
+            }
+            if (allocationMap[i]) {
+                oss << currentAddress << "\n";
                 // Simulate process ID (e.g., P1, P2, etc.)
                 oss << "P" << i + 1 << "\n";
                 currentAddress -= 4096;  // Assuming each process takes up 4096 bytes (adjust as needed)
-                oss << currentAddress << "\n";
+                oss << currentAddress << "\n\n";
             }
             else {
                 // Free space
-                oss << ".\n";
+                oss << "\n";
                 currentAddress -= 16;  // Assuming each block of free space is 4096 bytes
                 oss << currentAddress << "\n";
             }
