@@ -52,6 +52,6 @@ private:
     ProcessState currentState;
     string timeCreated;
 
-    size_t memoryRequired = 16;
+    size_t memoryRequired = 4096;
     void* memoryPtr = nullptr;
 };

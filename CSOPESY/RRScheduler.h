@@ -15,6 +15,6 @@ private:
     std::shared_ptr<SchedulerWorker> findAvailableWorker();
     int counter = 0;
     int timeQuantum;
-    const size_t maximumMemorySize = 50;
+    const size_t maximumMemorySize = 16384;
     FlatMemoryAllocator memoryAllocator = FlatMemoryAllocator(maximumMemorySize);
 };

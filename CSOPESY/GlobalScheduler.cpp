@@ -6,9 +6,26 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
+#include <chrono>
+
+std::string getTimestamp() {
+    auto now = chrono::system_clock::now();
+    std::time_t now_time = chrono::system_clock::to_time_t(now);
+    std::tm local_tm;
+#ifdef _WIN32
+    localtime_s(&local_tm, &now_time);
+#else
+    (&now_time, &local_tm);
+#endif
+    std::ostringstream oss;
+    oss << std::put_time(&local_tm, "%m/%d/%Y, %I:%M:%S %p");
+
+    return oss.str();
+}
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec) {
+GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, FlatMemoryAllocator* allocator)
+    : workers(numCpu), timeQuantum(quantumCycles), processFreq(batchProcessFreq), minCom(min), maxCom(max), execDelay(delaysPerExec), memoryAllocator(allocator) {
     if (schedulerType == "\"fcfs\"") {
         scheduler = std::make_shared<FCFSScheduler>(numCpu);
     }
@@ -19,21 +36,15 @@ GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned
         std::cerr << "Error: scheduler type does not exist" << std::endl;
     }
 
-    workers = numCpu;
-    processFreq = batchProcessFreq;
-    minCom = min;
-    maxCom = max;
-    execDelay = delaysPerExec;
-
-
     this->start();
     scheduler->start();
+
 }
 
-void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec)
+void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, FlatMemoryAllocator* allocator)
 {
     if (sharedInstance == nullptr) {
-        sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec);
+        sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec, allocator);
     }
 }
 
@@ -94,7 +105,7 @@ std::string GlobalScheduler::listProcesses() const {
     int availableCores = scheduler->getAvailableCores();
     float utilization =  ((workers - availableCores) / workers) * 100;
     //cout << "CPU Cycles: " << std::to_string(cpuCycles) << "\n";
-   
+    
 
     listOfProcess = "";
     if (processes.empty()) {
@@ -158,16 +169,47 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
     return nullptr;
 }
 
+void GlobalScheduler::logMemory() const {
+    int processCount = memoryAllocator->getProcessCount();
+    size_t externalFragmentation = memoryAllocator->getExternalFragmentation();
+
+    // Open file for logging memory snapshot
+    static int quantumCycle = 0;  // Track quantum cycle number
+    std::ofstream outFile("memory_stamp_" + std::to_string(quantumCycle++) + ".txt");
+
+    if (!outFile.is_open()) {
+        std::cerr << "Error opening file!\n";
+        return;
+    }
+
+    // Write timestamp
+    outFile << "Timestamp: " << getTimestamp() << "\n";
+
+    // Write number of processes in memory
+    outFile << "Number of processes in memory: " << processCount << "\n";
+
+    // Write total external fragmentation in KB
+    outFile << "Total external fragmentation in KB: " << externalFragmentation << "\n";  // Convert bytes to KB
+
+    // Write ASCII printout of memory (assuming visualizeMemory returns a formatted string)
+    outFile << memoryAllocator->visualizeMemory();
+
+    outFile.close();
+}
+
 void GlobalScheduler::run() {
     ticks = scheduler->schedulerWorkers.size();
     unsigned long int processCounter = 0;
     unsigned long int execCounter = 0;
+    unsigned long int quantumCounter = 0;
     while (true) {
-        sleep(1);
+
+        sleep(400);
         if (ticks == workers) {
             ticks = 0;
             processCounter++;
             execCounter++;
+            quantumCounter++;
 
             if (execCounter >= execDelay) {    
                 this->scheduler->execute();
@@ -179,6 +221,11 @@ void GlobalScheduler::run() {
                     createProcess();
                 }
                 processCounter = 0;
+            }
+
+            if (quantumCounter >= timeQuantum) {
+                //GlobalScheduler::getInstance()->logMemory();
+                quantumCounter = 0;
             }
         }
     }

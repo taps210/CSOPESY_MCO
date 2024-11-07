@@ -42,4 +42,5 @@ protected:
 	std::vector<std::shared_ptr<Process>> processes;
 	std::queue<std::shared_ptr<Process>> readyQueue;
 	std::vector<std::shared_ptr<SchedulerWorker>> schedulerWorkers;
+	//std::shared_ptr<IMemoryAllocator> memoryAllocator;
 };

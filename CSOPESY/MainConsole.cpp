@@ -2,6 +2,7 @@
 #include <iostream>
 #include "ConsoleManager.h"
 #include "GlobalScheduler.h"
+#include "FlatMemoryAllocator.h"
 #include <sstream>
 #include <vector>
 #include <string>
@@ -176,5 +177,7 @@ void MainConsole::configureSystem() {
         }
     }
 
-    GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec);
+    FlatMemoryAllocator* allocator = new FlatMemoryAllocator(16384);
+
+    GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec, allocator);
 }

@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 
 class FlatMemoryAllocator : IMemoryAllocator {
 public:
@@ -45,11 +46,43 @@ public:
         if (allocationMap[index]) {
             deallocateAt(index, size);
         }
-        cout << "Deallocated. New size: " << allocatedSize;
     }
 
     std::string visualizeMemory() override {
-        return std::to_string(allocatedSize);
+        std::ostringstream oss;
+
+        // Print upper boundary
+        oss << "----end---- = " << maximumSize << "\n";
+
+        // Iterate through memory and print process IDs or free space
+        size_t currentAddress = maximumSize;
+        for (size_t i = 0; i < memory.size(); ++i) {
+            if (allocationMap[i]) {
+                // Simulate process ID (e.g., P1, P2, etc.)
+                oss << "P" << i + 1 << "\n";
+                currentAddress -= 4096;  // Assuming each process takes up 4096 bytes (adjust as needed)
+                oss << currentAddress << "\n";
+            }
+            else {
+                // Free space
+                oss << ".\n";
+                currentAddress -= 16;  // Assuming each block of free space is 4096 bytes
+                oss << currentAddress << "\n";
+            }
+        }
+
+        // Print lower boundary
+        oss << "----start---- = 0\n";
+
+        return oss.str();
+    }
+
+    int getProcessCount() {
+        return processCount;
+    }
+
+    size_t getExternalFragmentation() {
+        return maximumSize - allocatedSize;
     }
 
 private:
@@ -57,6 +90,7 @@ private:
     size_t allocatedSize;
     std::vector<char> memory;
     std::unordered_map<size_t, bool> allocationMap;
+    int processCount = 0;
 
     void initializeMemory() {
         std::fill(memory.begin(), memory.end(), '.'); // Reset memory to unallocated
@@ -81,6 +115,7 @@ private:
             allocationMap[i] = true;
         }
         allocatedSize += size;
+        processCount++;
     }
 
     void deallocateAt(size_t index, size_t size) {
@@ -88,5 +123,6 @@ private:
             allocationMap[i] = false;
         }
         allocatedSize -= size;
+        processCount--;
     }
 };
