@@ -11,6 +11,7 @@ public:
     FlatMemoryAllocator(size_t maximumSize) : maximumSize(maximumSize), allocatedSize(0), memory(maximumSize, '.') {
         for (size_t i = 0; i < maximumSize; ++i) {
             allocationMap[i] = false;
+            processMap[i] = -1;
         }
     }
 
@@ -18,7 +19,7 @@ public:
         memory.clear();
     }
 
-    void* allocate(size_t size) override {
+    void* allocate(size_t size, int processId) override {
         // Find the first available block that can accommodate the process
         //cout << "\nSize to Allocate: " << size << endl;
         for (size_t i = 0; i < maximumSize - size + 1; ++i) {
@@ -30,7 +31,7 @@ public:
 
             if (!allocationMap[i] && canAllocateAt(i, size)) {
                 //cout << "Allocating...\n" << endl;
-                allocateAt(i, size);
+                allocateAt(i, size, processId);
                 return &memory[i];
             }
         }
@@ -56,23 +57,16 @@ public:
 
         // Iterate through memory and print process IDs or free space
         size_t currentAddress = maximumSize;
-        for (size_t i = 0; i < memory.size(); ++i) {
-            if (currentAddress == 0) {
-                break;
-            }
+        int i = maximumSize - 1;
+        while (i > 0) {
             if (allocationMap[i]) {
-                oss << currentAddress << "\n";
+                oss << i + 1 << "\n";
                 // Simulate process ID (e.g., P1, P2, etc.)
-                oss << "P" << i + 1 << "\n";
-                currentAddress -= 4096;  // Assuming each process takes up 4096 bytes (adjust as needed)
-                oss << currentAddress << "\n\n";
+                oss << "P" << processMap[i] << "\n";
+                i -= 4095;  // Assuming each process takes up 4096 bytes (adjust as needed)
+                oss << i << "\n\n";
             }
-            else {
-                // Free space
-                oss << "\n";
-                currentAddress -= 16;  // Assuming each block of free space is 4096 bytes
-                oss << currentAddress << "\n";
-            }
+            i--;
         }
 
         // Print lower boundary
@@ -93,7 +87,8 @@ private:
     size_t maximumSize;
     size_t allocatedSize;
     std::vector<char> memory;
-    std::unordered_map<size_t, bool> allocationMap;
+    std::unordered_map<size_t, int> allocationMap;
+    std::unordered_map<size_t, int> processMap;
     int processCount = 0;
 
     void initializeMemory() {
@@ -101,6 +96,7 @@ private:
         allocationMap.clear(); // Clear existing entries
         for (size_t i = 0; i < maximumSize; ++i) {
             allocationMap[i] = false;
+            processMap[i] = -1;
         }
     }
 
@@ -114,9 +110,10 @@ private:
         return true;
     }
 
-    void allocateAt(size_t index, size_t size) {
+    void allocateAt(size_t index, size_t size, int processId) {
         for (size_t i = index; i < index + size; ++i) {
             allocationMap[i] = true;
+            processMap[i] = processId;
         }
         allocatedSize += size;
         processCount++;
@@ -125,6 +122,7 @@ private:
     void deallocateAt(size_t index, size_t size) {
         for (size_t i = index; i < index + size; ++i) {
             allocationMap[i] = false;
+            processMap[i] = -1;
         }
         allocatedSize -= size;
         processCount--;

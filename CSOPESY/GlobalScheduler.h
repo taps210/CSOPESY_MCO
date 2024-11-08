@@ -5,6 +5,7 @@
 #include "Process.h"
 #include "AScheduler.h"
 #include "FlatMemoryAllocator.h"
+#include "MainConsole.h"
 
 
 class GlobalScheduler : CSOPESYThread {

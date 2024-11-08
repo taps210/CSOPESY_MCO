@@ -225,7 +225,9 @@ void GlobalScheduler::run() {
             }
 
             if (quantumCounter >= timeQuantum) {
-                GlobalScheduler::getInstance()->logMemory();
+                if (tester) {
+                    GlobalScheduler::getInstance()->logMemory();
+                }
                 quantumCounter = 0;
             }
         }

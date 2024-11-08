@@ -14,5 +14,4 @@ public:
 
 private:
 	bool initialized = false;
-	bool tester = false;
 };

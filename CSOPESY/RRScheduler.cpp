@@ -41,7 +41,7 @@ void RRScheduler::execute() {
 	
 	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
-		void* memory = memoryAllocator->allocate(currentProcess->getMemoryRequired());
+		void* memory = memoryAllocator->allocate(currentProcess->getMemoryRequired(), currentProcess->getPid());
 		//cout << memoryAllocator.visualizeMemory();
 		//cout << "Memory: " << memory << endl;
 		if (memory != nullptr) {
