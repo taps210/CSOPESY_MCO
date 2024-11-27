@@ -6,7 +6,7 @@
 
 class RRScheduler : public AScheduler {
 public:
-    RRScheduler(int numCpu, int timeQuantum, std::shared_ptr<FlatMemoryAllocator> memoryAllocator);
+    RRScheduler(int numCpu, int timeQuantum, std::shared_ptr<IMemoryAllocator> memoryAllocator);
 
     void init() override;
     void execute() override;

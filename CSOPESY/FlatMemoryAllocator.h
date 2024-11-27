@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-class FlatMemoryAllocator : IMemoryAllocator {
+class FlatMemoryAllocator : public IMemoryAllocator {
 public:
     FlatMemoryAllocator(size_t maximumSize) : maximumSize(maximumSize), allocatedSize(0), memory(maximumSize, '.') {
         for (size_t i = 0; i < maximumSize; ++i) {
@@ -19,11 +19,13 @@ public:
         memory.clear();
     }
 
-    void* allocate(size_t size, int processId) override {
+    void* allocate(shared_ptr<Process> process) override {
         // Find the first available block that can accommodate the process
         //cout << "\nSize to Allocate: " << size << endl;
+        size_t size = process->getMemoryRequired();
+        int processId = process->getPid();
         for (size_t i = 0; i < maximumSize - size + 1; ++i) {
-            
+
             //cout << "memory size: " << memory.size() << endl;
             //cout << "i: " << i << endl;
             //cout << "AllocationMap: " << allocationMap[i] << endl;
@@ -40,14 +42,21 @@ public:
         //cout << "Returning null\n\n" ;
         return nullptr;
     }
+    
+    void deallocate(std::shared_ptr<Process> process) override {
+        if (process->getMemoryPtr() == nullptr) {
+            return; // No memory allocated for this process
+        }
 
-    void deallocate(void* ptr, size_t size) override {
-        // Find the index of the memory block to deallocate
-        size_t index = static_cast<char*>(ptr) - &memory[0];
-        if (allocationMap[index]) {
+        size_t index = static_cast<char*>(process->getMemoryPtr()) - &memory[0]; // Correct index
+        size_t size = process->getMemoryRequired();
+
+        if (index + size <= maximumSize && allocationMap[index]) {
             deallocateAt(index, size);
+            process->setMemoryPtr(nullptr); // Clear the pointer in the Process object
         }
     }
+
 
     std::string visualizeMemory() override {
         std::ostringstream oss;

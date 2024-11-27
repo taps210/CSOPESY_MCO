@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
-
+#include "Process.h"
 class IMemoryAllocator {
 public:
-	virtual void* allocate(size_t size, int processId) = 0;
-	virtual void deallocate(void* ptr, size_t size) = 0;
+	virtual void* allocate(shared_ptr<Process> p) = 0;
+	virtual void deallocate(shared_ptr<Process> p) = 0;
 	virtual std::string visualizeMemory() = 0;
 };
 

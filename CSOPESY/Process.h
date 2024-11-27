@@ -37,6 +37,7 @@ public:
     void setCpuCoreId(int _cpuCoreId);
 
     size_t getMemoryRequired();
+    size_t getNumPages();
     void* getMemoryPtr();
     void setMemoryRequired(size_t size);
     void setMemoryPtr(void* ptr);
@@ -53,5 +54,6 @@ private:
     string timeCreated;
 
     size_t memoryRequired = 4096;
+    size_t numPages = 2;
     void* memoryPtr = nullptr;
 };

@@ -25,7 +25,7 @@ std::string getTimestamp() {
 }
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator)
+GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator)
     : workers(numCpu), timeQuantum(quantumCycles), processFreq(batchProcessFreq), minCom(min), maxCom(max), execDelay(delaysPerExec), memoryAllocator(allocator) {
     if (schedulerType == "\"fcfs\"") {
         scheduler = std::make_shared<FCFSScheduler>(numCpu, allocator);
@@ -42,7 +42,7 @@ GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned
 
 }
 
-void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator)
+void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator)
 {
     if (sharedInstance == nullptr) {
         sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec, allocator);
@@ -170,33 +170,33 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
     return nullptr;
 }
 
-void GlobalScheduler::logMemory() const {
-    int processCount = memoryAllocator->getProcessCount();
-    size_t externalFragmentation = memoryAllocator->getExternalFragmentation();
-
-    // Open file for logging memory snapshot
-    static int quantumCycle = 0;  // Track quantum cycle number
-    std::ofstream outFile("memory_stamp_" + std::to_string(quantumCycle++) + ".txt");
-
-    if (!outFile.is_open()) {
-        std::cerr << "Error opening file!\n";
-        return;
-    }
-
-    // Write timestamp
-    outFile << "Timestamp: " << getTimestamp() << "\n";
-
-    // Write number of processes in memory
-    outFile << "Number of processes in memory: " << processCount << "\n";
-
-    // Write total external fragmentation in KB
-    outFile << "Total external fragmentation in KB: " << externalFragmentation << "\n";  // Convert bytes to KB
-
-    // Write ASCII printout of memory (assuming visualizeMemory returns a formatted string)
-    outFile << memoryAllocator->visualizeMemory();
-
-    outFile.close();
-}
+//void GlobalScheduler::logMemory() const {
+//    //int processCount = memoryAllocator->getProcessCount();
+//    //size_t externalFragmentation = memoryAllocator->getExternalFragmentation();
+//
+//    // Open file for logging memory snapshot
+//    static int quantumCycle = 0;  // Track quantum cycle number
+//    std::ofstream outFile("memory_stamp_" + std::to_string(quantumCycle++) + ".txt");
+//
+//    if (!outFile.is_open()) {
+//        std::cerr << "Error opening file!\n";
+//        return;
+//    }
+//
+//    // Write timestamp
+//    outFile << "Timestamp: " << getTimestamp() << "\n";
+//
+//    //// Write number of processes in memory
+//    //outFile << "Number of processes in memory: " << processCount << "\n";
+//
+//    //// Write total external fragmentation in KB
+//    //outFile << "Total external fragmentation in KB: " << externalFragmentation << "\n";  // Convert bytes to KB
+//
+//    // Write ASCII printout of memory (assuming visualizeMemory returns a formatted string)
+//    outFile << memoryAllocator->visualizeMemory();
+//
+//    outFile.close();
+//}
 
 void GlobalScheduler::run() {
     ticks = scheduler->schedulerWorkers.size();
@@ -204,9 +204,11 @@ void GlobalScheduler::run() {
     unsigned long int execCounter = 0;
     unsigned long int quantumCounter = 0;
     while (true) {
+        //cout << ticks << endl;
 
         sleep(100);
         if (ticks == workers) {
+            memoryAllocator->visualizeMemory();
             ticks = 0;
             processCounter++;
             execCounter++;
@@ -226,7 +228,7 @@ void GlobalScheduler::run() {
 
             if (quantumCounter >= timeQuantum) {
                 if (tester) {
-                    GlobalScheduler::getInstance()->logMemory();
+                    //GlobalScheduler::getInstance()->logMemory();
                 }
                 quantumCounter = 0;
             }

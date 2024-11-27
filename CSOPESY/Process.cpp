@@ -98,6 +98,10 @@ size_t Process::getMemoryRequired() {
     return this->memoryRequired;
 }
 
+size_t Process::getNumPages() {
+    return this->numPages;
+}
+
 void* Process::getMemoryPtr() {
     return this->memoryPtr;
 }

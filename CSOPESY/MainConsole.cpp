@@ -3,6 +3,7 @@
 #include "ConsoleManager.h"
 #include "GlobalScheduler.h"
 #include "FlatMemoryAllocator.h"
+#include "PagingAllocator.h"
 #include <sstream>
 #include <vector>
 #include <string>
@@ -177,7 +178,7 @@ void MainConsole::configureSystem() {
         }
     }
 
-    std::shared_ptr<FlatMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(16384);
+    std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(16384);
 
     GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec, allocator);
 }

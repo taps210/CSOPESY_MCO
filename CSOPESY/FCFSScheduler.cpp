@@ -3,7 +3,7 @@
 #include "FlatMemoryAllocator.h"
 #include <iostream>
 
-FCFSScheduler::FCFSScheduler(int numCpu, std::shared_ptr<FlatMemoryAllocator> memoryAllocator)
+FCFSScheduler::FCFSScheduler(int numCpu, std::shared_ptr<IMemoryAllocator> memoryAllocator)
 	: AScheduler(numCpu, SchedulingAlgorithm::FCFS, memoryAllocator) {
 }
 

@@ -4,14 +4,14 @@
 #include "CSOPESYThread.h"
 #include "Process.h"
 #include "AScheduler.h"
-#include "FlatMemoryAllocator.h"
+#include "IMemoryAllocator.h"
 #include "MainConsole.h"
 
 
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator);
+	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator);
 	static void destroy();
 	void run() override;
 
@@ -25,12 +25,12 @@ public:
 	std::string listProcesses() const;
 	void createProcess();
 	void logProcess() const;
-	void logMemory() const;
+	//void logMemory() const;
 	void setTester(bool test);
 	bool getTester();
 
 private:
-	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator);
+	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}
@@ -47,5 +47,5 @@ private:
 	unsigned long int processFreq;
 	unsigned long int execDelay;
 	unsigned long int timeQuantum;
-	std::shared_ptr<FlatMemoryAllocator> memoryAllocator;
+	std::shared_ptr<IMemoryAllocator> memoryAllocator;
 };

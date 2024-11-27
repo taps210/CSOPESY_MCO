@@ -23,7 +23,7 @@ public:
 		ROUND_ROBIN
 	};
 
-	AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo, std::shared_ptr<FlatMemoryAllocator> memoryAllocator);
+	AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo, std::shared_ptr<IMemoryAllocator> memoryAllocator);
 
 	void addProcess(std::shared_ptr<Process> process);
 	//std::shared_ptr<Process> findProcess(std::string processName);
@@ -44,5 +44,5 @@ protected:
 	std::vector<std::shared_ptr<Process>> processes;
 	std::queue<std::shared_ptr<Process>> readyQueue;
 	std::vector<std::shared_ptr<SchedulerWorker>> schedulerWorkers;
-	std::shared_ptr<FlatMemoryAllocator> memoryAllocator;
+	std::shared_ptr<IMemoryAllocator> memoryAllocator;
 };

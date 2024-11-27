@@ -2,7 +2,7 @@
 #include "FlatMemoryAllocator.h"
 #include <iostream>
 
-AScheduler::AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo, std::shared_ptr<FlatMemoryAllocator> memoryAllocator)
+AScheduler::AScheduler(int numCpu, SchedulingAlgorithm schedulingAlgo, std::shared_ptr<IMemoryAllocator> memoryAllocator)
     : schedulingAlgo(schedulingAlgo), workersCount(numCpu), memoryAllocator(memoryAllocator) {
     for (int i = 0; i < numCpu; i++) {
         // Initialize worker
