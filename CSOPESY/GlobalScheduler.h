@@ -11,7 +11,10 @@
 class GlobalScheduler : CSOPESYThread {
 public:
 	static GlobalScheduler* getInstance();
-	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator);
+	static void initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, 
+							unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, 
+							unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator, 
+							size_t minMemPerProc, size_t maxMemPerProc, size_t memPerFrame);
 	static void destroy();
 	void run() override;
 
@@ -29,8 +32,12 @@ public:
 	void setTester(bool test);
 	bool getTester();
 
+
 private:
-	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator);
+	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles,
+					unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max,
+					unsigned long int delaysPerExec, std::shared_ptr<FlatMemoryAllocator> allocator,
+					size_t minMemPerProc, size_t maxMemPerProc, size_t memPerFrame);
 	~GlobalScheduler() = default;
 	GlobalScheduler(GlobalScheduler const&) {};
 	GlobalScheduler& operator=(GlobalScheduler const&) {}
@@ -48,4 +55,7 @@ private:
 	unsigned long int execDelay;
 	unsigned long int timeQuantum;
 	std::shared_ptr<FlatMemoryAllocator> memoryAllocator;
+	size_t minMemPerProc = 4096;   
+	size_t maxMemPerProc = 8192;   
+	size_t memPerFrame = 4096;     
 };

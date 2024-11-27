@@ -38,8 +38,10 @@ public:
 
     size_t getMemoryRequired();
     void* getMemoryPtr();
-    void setMemoryRequired(size_t size);
     void setMemoryPtr(void* ptr);
+
+    void setMemoryRequired(size_t size);
+    void setPagesRequired(size_t pages);
 
 private:
     int pid;
@@ -52,6 +54,8 @@ private:
     ProcessState currentState;
     string timeCreated;
 
-    size_t memoryRequired = 4096;
     void* memoryPtr = nullptr;
+
+    size_t memoryRequired;
+    size_t pagesRequired;
 };

@@ -102,10 +102,15 @@ void* Process::getMemoryPtr() {
     return this->memoryPtr;
 }
 
+void Process::setMemoryPtr(void* ptr) {
+    memoryPtr = ptr;
+}
+
 void Process::setMemoryRequired(size_t size) {
     memoryRequired = size;
 }
 
-void Process::setMemoryPtr(void* ptr) {
-    memoryPtr = ptr;
+void Process::setPagesRequired(size_t pages) {
+    pagesRequired = pages;
 }
+
