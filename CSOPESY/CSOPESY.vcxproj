@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="AConsole.cpp" />
     <ClCompile Include="AScheduler.cpp" />
+    <ClCompile Include="BackingStore.cpp" />
     <ClCompile Include="ConsoleManager.cpp" />
     <ClCompile Include="CSOPESY.cpp" />
     <ClCompile Include="CSOPESYThread.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="AConsole.h" />
     <ClInclude Include="AScheduler.h" />
+    <ClInclude Include="BackingStore.h" />
     <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="CSOPESYThread.h" />
     <ClInclude Include="FCFSScheduler.h" />

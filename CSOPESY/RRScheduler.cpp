@@ -24,7 +24,7 @@ std::shared_ptr<SchedulerWorker> RRScheduler::findAvailableWorker() {
 }
 
 void RRScheduler::execute() {
-	//cout << memoryAllocator->visualizeMemory();
+	cout << memoryAllocator->visualizeMemory();
 
 	std::shared_ptr<SchedulerWorker> worker = nullptr;
 	// Preempt

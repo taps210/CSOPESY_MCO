@@ -1,9 +1,10 @@
 #include "PagingAllocator.h"
 #include <iostream>
 #include <algorithm>
+#include <Process.h>
 
-PagingAllocator::PagingAllocator(size_t maxMemorySize)
-    : maxMemorySize(maxMemorySize), numFrames(maxMemorySize) {
+PagingAllocator::PagingAllocator(size_t maxMemorySize, size_t memPerFrame)
+    : maxMemorySize(maxMemorySize), numFrames(maxMemorySize / memPerFrame) {
     for (size_t i = 0; i < numFrames; ++i) {
         freeFrameList.push_back(i);
     }
@@ -11,7 +12,7 @@ PagingAllocator::PagingAllocator(size_t maxMemorySize)
 
 void* PagingAllocator::allocate(std::shared_ptr<Process> process) {
     size_t processId = process->getPid();
-    size_t numFramesNeeded = process->getNumPages();
+    size_t numFramesNeeded = process->getPagesRequired();
     if (numFramesNeeded > freeFrameList.size()) {
         std::cerr << "Memory allocation failed. Not enough free frames.\n";
         return nullptr;

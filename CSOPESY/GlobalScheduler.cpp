@@ -25,8 +25,12 @@ std::string getTimestamp() {
 }
 
 GlobalScheduler* GlobalScheduler::sharedInstance = nullptr;
-GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator)
-    : workers(numCpu), timeQuantum(quantumCycles), processFreq(batchProcessFreq), minCom(min), maxCom(max), execDelay(delaysPerExec), memoryAllocator(allocator) {
+GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles, 
+                                unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, 
+                                unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator, 
+                                size_t minMemPerProc, size_t maxMemPerProc, size_t memPerFrame)
+    : workers(numCpu), timeQuantum(quantumCycles), processFreq(batchProcessFreq), minCom(min), maxCom(max), execDelay(delaysPerExec), 
+        memoryAllocator(allocator), minMemPerProc(minMemPerProc), maxMemPerProc(maxMemPerProc), memPerFrame(memPerFrame){
     if (schedulerType == "\"fcfs\"") {
         scheduler = std::make_shared<FCFSScheduler>(numCpu, allocator);
     }
@@ -42,10 +46,13 @@ GlobalScheduler::GlobalScheduler(int numCpu, std::string schedulerType, unsigned
 
 }
 
-void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles, unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max, unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator)
+void GlobalScheduler::initialize(int numCpu, std::string schedulerType, unsigned long int quantumCycles,
+                                unsigned long int batchProcessFreq, unsigned long int min, unsigned long int max,
+                                unsigned long int delaysPerExec, std::shared_ptr<IMemoryAllocator> allocator,
+                                size_t minMemPerProc, size_t maxMemPerProc, size_t memPerFrame)
 {
     if (sharedInstance == nullptr) {
-        sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec, allocator);
+        sharedInstance = new GlobalScheduler(numCpu, schedulerType, quantumCycles, batchProcessFreq, min, max, delaysPerExec, allocator, minMemPerProc, maxMemPerProc, memPerFrame);
     }
 }
 
@@ -72,7 +79,6 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     static int nextPid = 0;
     std::shared_ptr<Process> newProcess = std::make_shared<Process>(nextPid++, processName);
 
-    // Week 7
     int i = 0;
     std::srand(static_cast<unsigned int>(std::time(0)));
     unsigned long int commands = minCom + std::rand() % (maxCom - minCom + 1);
@@ -82,6 +88,20 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     } else {
         std::cerr << "Error: Number of commands is not within the min/max bounds" << std::endl;
     }
+
+
+
+    // Roll a random value for memory between min and max bounds.
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    size_t memoryRequired = minMemPerProc + std::rand() % (maxMemPerProc - minMemPerProc + 1);
+
+    // Calculate the number of pages required.
+    size_t pagesRequired = memoryRequired / memPerFrame;
+
+
+    newProcess->setMemoryRequired(memoryRequired);
+    newProcess->setPagesRequired(pagesRequired);
+
 
 
     processes[processName] = newProcess;

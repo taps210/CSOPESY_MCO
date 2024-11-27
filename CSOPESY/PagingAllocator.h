@@ -7,7 +7,7 @@
 
 class PagingAllocator : public IMemoryAllocator {
 public:
-    PagingAllocator(size_t maxMemorySize);
+    PagingAllocator(size_t maxMemorySize, size_t memPerFrame);
 
     void* allocate(std::shared_ptr<Process> process) override;
     void deallocate(std::shared_ptr<Process> process) override;

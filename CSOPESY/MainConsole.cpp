@@ -152,6 +152,10 @@ void MainConsole::configureSystem() {
     unsigned long int minCom = 1;
     unsigned long int maxCom = 1;
     unsigned long int delaysPerExec = 0;
+    size_t maxOverallMem = 16384; // Default: 16 KB
+    size_t memPerFrame = 4096;    // Default: 4 KB per frame
+    size_t minMemPerProc = 4096;  // Default: 4 KB
+    size_t maxMemPerProc = 8192;  // Default: 8 KB
 
     while (configFile >> param) {
         if (param == "num-cpu") {
@@ -176,9 +180,31 @@ void MainConsole::configureSystem() {
         else if (param == "delay-per-exec") {
             configFile >> delaysPerExec;
         }
+        else if (param == "max-overall-mem") {
+            configFile >> maxOverallMem;
+        }
+        else if (param == "mem-per-frame") {
+            configFile >> memPerFrame;
+        }
+        else if (param == "min-mem-per-proc") {
+            configFile >> minMemPerProc;
+        }
+        else if (param == "max-mem-per-proc") {
+            configFile >> maxMemPerProc;
+        }   
     }
 
-    std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(16384);
+    std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(maxOverallMem);
+    //std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<PagingAllocator>(maxOverallMem, memPerFrame);
 
-    GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec, allocator);
+    if (maxOverallMem == memPerFrame) {
+        // Use flat memory allocator
+        std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(maxOverallMem);
+    }
+    else {
+        // Use a paged memory allocator 
+        std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<PagingAllocator>(maxOverallMem, memPerFrame);
+    }
+
+    GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec, allocator, minMemPerProc, maxMemPerProc, memPerFrame);
 }

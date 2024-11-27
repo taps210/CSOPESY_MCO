@@ -37,10 +37,12 @@ public:
     void setCpuCoreId(int _cpuCoreId);
 
     size_t getMemoryRequired();
-    size_t getNumPages();
+    size_t getPagesRequired();
     void* getMemoryPtr();
-    void setMemoryRequired(size_t size);
     void setMemoryPtr(void* ptr);
+
+    void setMemoryRequired(size_t size);
+    void setPagesRequired(size_t pages);
 
 private:
     int pid;
@@ -53,7 +55,7 @@ private:
     ProcessState currentState;
     string timeCreated;
 
-    size_t memoryRequired = 4096;
-    size_t numPages = 2;
+    size_t memoryRequired;
     void* memoryPtr = nullptr;
+    size_t pagesRequired;
 };
