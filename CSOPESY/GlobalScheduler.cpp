@@ -98,7 +98,6 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     // Calculate the number of pages required.
     size_t pagesRequired = memoryRequired / memPerFrame;
 
-    std::shared_ptr<Process> newProcess = std::make_shared<Process>(nextPid++, processName);
 
     newProcess->setMemoryRequired(memoryRequired);
     newProcess->setPagesRequired(pagesRequired);
