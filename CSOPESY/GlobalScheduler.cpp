@@ -171,31 +171,31 @@ std::shared_ptr<Process> GlobalScheduler::findProcess(std::string processName) {
 }
 
 void GlobalScheduler::logMemory() const {
-    int processCount = memoryAllocator->getProcessCount();
-    size_t externalFragmentation = memoryAllocator->getExternalFragmentation();
+    //int processCount = memoryAllocator->getProcessCount();
+    //size_t externalFragmentation = memoryAllocator->getExternalFragmentation();
 
-    // Open file for logging memory snapshot
-    static int quantumCycle = 0;  // Track quantum cycle number
-    std::ofstream outFile("memory_stamp_" + std::to_string(quantumCycle++) + ".txt");
+    //// Open file for logging memory snapshot
+    //static int quantumCycle = 0;  // Track quantum cycle number
+    //std::ofstream outFile("memory_stamp_" + std::to_string(quantumCycle++) + ".txt");
 
-    if (!outFile.is_open()) {
-        std::cerr << "Error opening file!\n";
-        return;
-    }
+    //if (!outFile.is_open()) {
+    //    std::cerr << "Error opening file!\n";
+    //    return;
+    //}
 
-    // Write timestamp
-    outFile << "Timestamp: " << getTimestamp() << "\n";
+    //// Write timestamp
+    //outFile << "Timestamp: " << getTimestamp() << "\n";
 
-    // Write number of processes in memory
-    outFile << "Number of processes in memory: " << processCount << "\n";
+    //// Write number of processes in memory
+    //outFile << "Number of processes in memory: " << processCount << "\n";
 
-    // Write total external fragmentation in KB
-    outFile << "Total external fragmentation in KB: " << externalFragmentation << "\n";  // Convert bytes to KB
+    //// Write total external fragmentation in KB
+    //outFile << "Total external fragmentation in KB: " << externalFragmentation << "\n";  // Convert bytes to KB
 
-    // Write ASCII printout of memory (assuming visualizeMemory returns a formatted string)
-    outFile << memoryAllocator->visualizeMemory();
+    //// Write ASCII printout of memory (assuming visualizeMemory returns a formatted string)
+    //outFile << memoryAllocator->visualizeMemory();
 
-    outFile.close();
+    //outFile.close();
 }
 
 void GlobalScheduler::run() {

@@ -72,6 +72,9 @@
     <ClCompile Include="IMemoryAllocator.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
+    <ClCompile Include="BackingStore.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleManager.h">
@@ -111,6 +114,9 @@
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="IMemoryAllocator.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="BackingStore.h">
       <Filter>Memory</Filter>
     </ClInclude>
   </ItemGroup>

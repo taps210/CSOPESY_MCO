@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-class FlatMemoryAllocator : IMemoryAllocator {
+class FlatMemoryAllocator : public IMemoryAllocator {
 public:
     FlatMemoryAllocator(size_t maximumSize) : maximumSize(maximumSize), allocatedSize(0), memory(maximumSize, '.') {
         for (size_t i = 0; i < maximumSize; ++i) {
@@ -19,59 +19,40 @@ public:
         memory.clear();
     }
 
-    void* allocate(size_t size, int processId) override {
-        // Find the first available block that can accommodate the process
-        //cout << "\nSize to Allocate: " << size << endl;
+    virtual void* allocate(size_t size, int processId) override {
         for (size_t i = 0; i < maximumSize - size + 1; ++i) {
-            
-            //cout << "memory size: " << memory.size() << endl;
-            //cout << "i: " << i << endl;
-            //cout << "AllocationMap: " << allocationMap[i] << endl;
-            //cout << "Can Allocated?: " << canAllocateAt(i, size) << endl;
-
             if (!allocationMap[i] && canAllocateAt(i, size)) {
-                //cout << "Allocating...\n" << endl;
                 allocateAt(i, size, processId);
                 return &memory[i];
             }
         }
-
-        // No available block found, return nullptr
-        //cout << "Returning null\n\n" ;
         return nullptr;
     }
 
-    void deallocate(void* ptr, size_t size) override {
-        // Find the index of the memory block to deallocate
+    virtual void deallocate(void* ptr, size_t size) override {
         size_t index = static_cast<char*>(ptr) - &memory[0];
         if (allocationMap[index]) {
             deallocateAt(index, size);
         }
     }
 
-    std::string visualizeMemory() override {
+    virtual std::string visualizeMemory() override {
         std::ostringstream oss;
-
-        // Print upper boundary
         oss << "----end---- = " << maximumSize << "\n";
 
-        // Iterate through memory and print process IDs or free space
         size_t currentAddress = maximumSize;
         int i = maximumSize - 1;
         while (i > 0) {
             if (allocationMap[i]) {
                 oss << i + 1 << "\n";
-                // Simulate process ID (e.g., P1, P2, etc.)
                 oss << "P" << processMap[i] << "\n";
-                i -= 4095;  // Assuming each process takes up 4096 bytes (adjust as needed)
+                i -= 4095;
                 oss << i << "\n\n";
             }
             i--;
         }
 
-        // Print lower boundary
         oss << "----start---- = 0\n";
-
         return oss.str();
     }
 
@@ -83,7 +64,7 @@ public:
         return maximumSize - allocatedSize;
     }
 
-private:
+protected:
     size_t maximumSize;
     size_t allocatedSize;
     std::vector<char> memory;
@@ -92,8 +73,8 @@ private:
     int processCount = 0;
 
     void initializeMemory() {
-        std::fill(memory.begin(), memory.end(), '.'); // Reset memory to unallocated
-        allocationMap.clear(); // Clear existing entries
+        std::fill(memory.begin(), memory.end(), '.');
+        allocationMap.clear();
         for (size_t i = 0; i < maximumSize; ++i) {
             allocationMap[i] = false;
             processMap[i] = -1;
@@ -104,7 +85,7 @@ private:
         if (index + size > maximumSize) return false;
         for (size_t i = index; i < index + size; ++i) {
             if (allocationMap.find(i) != allocationMap.end() && allocationMap.at(i)) {
-                return false;  // If any part of the block is already allocated, return false
+                return false;
             }
         }
         return true;
