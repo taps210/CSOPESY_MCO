@@ -113,8 +113,6 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     return newProcess;
 }
 
-
-
 // Week 7
 void GlobalScheduler::createProcess() {
     j++;
@@ -135,13 +133,14 @@ std::string GlobalScheduler::listStats() const {
     listOfStats += "Used Memory (KB): " + std::to_string(memoryAllocator->getUsedMemory()) + "\n";
     listOfStats += "Free Memory (KB): " + std::to_string(memoryAllocator->getFreeMemory()) + "\n";
     listOfStats += "Idle CPU Ticks: " + std::to_string(getIdleCpuTicks()) + "\n";
-    listOfStats += "Active CPU Ticks: " + std::to_string(getActiveCpuTicks()) + "\n";
-    listOfStats += "Total CPU Ticks: " + std::to_string(getTotalCpuTicks()) + "\n";
-    listOfStats += "Pages Paged In: " + std::to_string(getPagedIn()) + "\n";
+    listOfStats += "Active CPU Ticks: " + std::to_string(getActiveCpuTicks()) + "\n";*/
+    listOfStats += "Total CPU Ticks: " + std::to_string(totalTicks) + "\n";
+    /*listOfStats += "Pages Paged In: " + std::to_string(getPagedIn()) + "\n";
     listOfStats += "Pages Paged Out: " + std::to_string(getPagedOut()) + "\n";*/
 
     return listOfStats;
 }
+
 std::string GlobalScheduler::listProcesses() const {
     // For debugging only
     int availableCores = scheduler->getAvailableCores();
@@ -246,7 +245,7 @@ void GlobalScheduler::run() {
     unsigned long int quantumCounter = 0;
     while (true) {
         //cout << ticks << endl;
-
+        totalTicks++;
         sleep(100);
         if (ticks == workers) {
             memoryAllocator->visualizeMemory();

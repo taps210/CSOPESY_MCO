@@ -23,7 +23,6 @@ public:
         //cout << "\nSize to Allocate: " << size << endl;
         size_t size = process->getMemoryRequired();
         int processId = process->getPid();
-        auto oldestProcess = processesInMem.front();
 
         // Find the first available block that can accommodate the process
         for (size_t i = 0; i < maximumSize - size + 1; ++i) {
@@ -38,7 +37,7 @@ public:
                 processesInMem.push(process);
 
                 auto newEnd = std::remove_if(backingStore.begin(), backingStore.end(), [processId](const std::shared_ptr<Process>& p) {
-                        return p->getPid() == processId; // Compare process ID
+                    return p->getPid() == processId; // Compare process ID
                     });
                 backingStore.erase(newEnd, backingStore.end());
 
@@ -46,10 +45,10 @@ public:
             }
         }
 
+        auto oldestProcess = processesInMem.front();
         backingStore.push_back(oldestProcess);
         deallocate(oldestProcess);
-        processesInMem.pop();
-        return allocate(process);
+        return nullptr;
     }
     
     void deallocate(std::shared_ptr<Process> process) override {
