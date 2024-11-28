@@ -20,10 +20,12 @@ public:
     }
 
     void* allocate(shared_ptr<Process> process) override {
-        // Find the first available block that can accommodate the process
         //cout << "\nSize to Allocate: " << size << endl;
         size_t size = process->getMemoryRequired();
         int processId = process->getPid();
+        auto oldestProcess = processesInMem.front();
+
+        // Find the first available block that can accommodate the process
         for (size_t i = 0; i < maximumSize - size + 1; ++i) {
 
             //cout << "memory size: " << memory.size() << endl;
@@ -33,10 +35,21 @@ public:
 
             if (!allocationMap[i] && canAllocateAt(i, size)) {
                 allocateAt(i, size, processId);
+                processesInMem.push(process);
+
+                auto newEnd = std::remove_if(backingStore.begin(), backingStore.end(), [processId](const std::shared_ptr<Process>& p) {
+                    return p->getPid() == processId; // Compare process ID
+                    });
+                backingStore.erase(newEnd, backingStore.end());
+
                 return &memory[i];
             }
         }
-        return nullptr;
+
+        backingStore.push_back(oldestProcess);
+        deallocate(oldestProcess);
+        processesInMem.pop();
+        return allocate(process);
     }
     
     void deallocate(std::shared_ptr<Process> process) override {
@@ -88,6 +101,8 @@ protected:
     std::vector<char> memory;
     std::unordered_map<size_t, int> allocationMap;
     std::unordered_map<size_t, int> processMap;
+    std::vector<std::shared_ptr<Process>> backingStore;
+    std::queue<std::shared_ptr<Process>> processesInMem;
     int processCount = 0;
 
     void initializeMemory() {

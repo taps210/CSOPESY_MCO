@@ -37,6 +37,10 @@ void MainConsole::process() {
         else if (!initialized) {
             std::cout << "Please run 'initialize' first.\n";
         }
+        else if (args[0] == "vmstat") {
+            cout << GlobalScheduler::getInstance()->listStats();
+
+        }
         else if (args[0] == "screen" && args[1] == "-ls") {
             while (true) {
                 system("cls");
