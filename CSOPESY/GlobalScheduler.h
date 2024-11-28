@@ -33,7 +33,7 @@ public:
 	//void logMemory() const;
 	void setTester(bool test);
 	bool getTester();
-public:
+
 	int getCPUCount() const {
 		return workers;
 	}
@@ -64,6 +64,7 @@ private:
 	unsigned long int maxCom = 0;
 	bool tester = false;
 	int workers;
+	int totalTicks;
 	unsigned long int processFreq;
 	unsigned long int execDelay;
 	unsigned long int timeQuantum;
