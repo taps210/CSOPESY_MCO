@@ -194,16 +194,16 @@ void MainConsole::configureSystem() {
         }   
     }
 
-    std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(maxOverallMem);
+    std::shared_ptr<IMemoryAllocator> allocator;
     //std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<PagingAllocator>(maxOverallMem, memPerFrame);
 
     if (maxOverallMem == memPerFrame) {
         // Use flat memory allocator
-        std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<FlatMemoryAllocator>(maxOverallMem);
+        allocator = std::make_shared<FlatMemoryAllocator>(maxOverallMem);
     }
     else {
         // Use a paged memory allocator 
-        std::shared_ptr<IMemoryAllocator> allocator = std::make_shared<PagingAllocator>(maxOverallMem, memPerFrame);
+        allocator = std::make_shared<PagingAllocator>(maxOverallMem, memPerFrame);
     }
 
     GlobalScheduler::initialize(numCpu, schedulerType, quantumCycles, batchProcessFreq, minCom, maxCom, delaysPerExec, allocator, minMemPerProc, maxMemPerProc, memPerFrame);

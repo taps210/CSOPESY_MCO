@@ -40,7 +40,10 @@ void RRScheduler::execute() {
 		//system("cls");
 		if (i < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->isFinished()) {
 			std::shared_ptr<Process> process = schedulerWorkers[i]->getProcess();
+			schedulerWorkers[i]->assignProcess(nullptr);
+			schedulerWorkers[i]->update(false);
 			memoryAllocator->deallocate(process);
+			process->setMemoryPtr(nullptr);
 		}
 		else if (i  < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
 			std::shared_ptr<Process> process = schedulerWorkers[i]->getProcess();
@@ -70,6 +73,21 @@ void RRScheduler::execute() {
 		else {
 			//std::cout << "Insufficient memory for process \n";
 			break;
+		}
+	}
+
+	void RRScheduler::printBackingStore() {
+		std::cout << "Backing Store: \n";
+		if (backingStore.empty()) {
+			std::cout << "Empty\n";
+		}
+		else {
+			std::queue<std::shared_ptr<Process>> tempQueue = backingStore;
+			while (!tempQueue.empty()) {
+				auto process = tempQueue.front();
+				tempQueue.pop();
+				std::cout << "Process Name: " << process->getName() << ", PID: " << process->getPid() << "\n";
+			}
 		}
 	}
 
