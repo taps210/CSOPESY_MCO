@@ -24,7 +24,7 @@ std::shared_ptr<SchedulerWorker> RRScheduler::findAvailableWorker() {
 }
 
 void RRScheduler::execute() {
-	cout << memoryAllocator->visualizeMemory();
+	//cout << memoryAllocator->visualizeMemory();
 
 	std::shared_ptr<SchedulerWorker> worker = nullptr;
 	// Preempt
@@ -76,7 +76,7 @@ void RRScheduler::execute() {
 		}
 	}
 
-	void RRScheduler::printBackingStore() {
+	/*void RRScheduler::printBackingStore() {
 		std::cout << "Backing Store: \n";
 		if (backingStore.empty()) {
 			std::cout << "Empty\n";
@@ -89,7 +89,7 @@ void RRScheduler::execute() {
 				std::cout << "Process Name: " << process->getName() << ", PID: " << process->getPid() << "\n";
 			}
 		}
-	}
+	}*/
 
 	// Execute
 	for (int i = 0; i < schedulerWorkers.size(); i++) {
