@@ -19,6 +19,38 @@ public:
         memory.clear();
     }
 
+    //void* allocate(shared_ptr<Process> process) override {
+    //    //cout << "\nSize to Allocate: " << size << endl;
+    //    size_t size = process->getMemoryRequired();
+    //    int processId = process->getPid();
+
+    //    // Find the first available block that can accommodate the process
+    //    for (size_t i = 0; i < maximumSize - size + 1; ++i) {
+
+    //        //cout << "memory size: " << memory.size() << endl;
+    //        //cout << "i: " << i << endl;
+    //        //cout << "AllocationMap: " << allocationMap[i] << endl;
+    //        //cout << "Can Allocated?: " << canAllocateAt(i, size) << endl;
+
+    //        if (!allocationMap[i] && canAllocateAt(i, size)) {
+    //            allocateAt(i, size, processId);
+    //            processesInMem.push(process);
+
+    //            auto newEnd = std::remove_if(backingStore.begin(), backingStore.end(), [processId](const std::shared_ptr<Process>& p) {
+    //                    return p->getPid() == processId; // Compare process ID
+    //                });
+    //            backingStore.erase(newEnd, backingStore.end());
+
+    //            return &memory[i];
+    //        }
+    //    }
+
+    //    auto oldestProcess = processesInMem.front();
+    //    backingStore.push_back(oldestProcess);
+    //    deallocate(oldestProcess);
+    //    return nullptr;
+    //}
+
     void* allocate(shared_ptr<Process> process) override {
         //cout << "\nSize to Allocate: " << size << endl;
         size_t size = process->getMemoryRequired();
@@ -36,8 +68,31 @@ public:
                 allocateAt(i, size, processId);
                 processesInMem.push(process);
 
+                return &memory[i];
+            }
+        }
+        return nullptr;
+    }
+
+    void* allocateBackingStore(shared_ptr<Process> process) override {
+        //cout << "\nSize to Allocate: " << size << endl;
+        size_t size = process->getMemoryRequired();
+        int processId = process->getPid();
+
+        // Find the first available block that can accommodate the process
+        for (size_t i = 0; i < maximumSize - size + 1; ++i) {
+
+            //cout << "memory size: " << memory.size() << endl;
+            //cout << "i: " << i << endl;
+            //cout << "AllocationMap: " << allocationMap[i] << endl;
+            //cout << "Can Allocated?: " << canAllocateAt(i, size) << endl;
+
+            if (!allocationMap[i] && canAllocateAt(i, size)) {
+                allocateAt(i, size, processId);
+                processesInMem.push(process);
+
                 auto newEnd = std::remove_if(backingStore.begin(), backingStore.end(), [processId](const std::shared_ptr<Process>& p) {
-                        return p->getPid() == processId; // Compare process ID
+                    return p->getPid() == processId; // Compare process ID
                     });
                 backingStore.erase(newEnd, backingStore.end());
 
@@ -95,7 +150,7 @@ public:
                 std::cout << "Process Name: " << processPtr->getName() << ", PID: " << processPtr->getPid() << "\n";
             }
         }
-        return "hi";
+        return " ";
     }
 
     int getProcessCount() {

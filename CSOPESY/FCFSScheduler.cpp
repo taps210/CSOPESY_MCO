@@ -37,10 +37,19 @@ void FCFSScheduler::execute() {
 
 	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
-		readyQueue.pop();
-		
-		worker->update(true);
-		worker->assignProcess(currentProcess);
+		void* memory = memoryAllocator->allocate(currentProcess);
+
+		if (memory != nullptr) {
+			//std::cout << "Memory: " << memory << "\n";
+			//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
+			readyQueue.pop();
+			worker->update(true);
+			worker->assignProcess(currentProcess);
+			currentProcess->setMemoryPtr(memory);
+		}
+		else {
+			break;
+		}
 	}
 	for (int i = 0; i < schedulerWorkers.size(); i++) {
 		schedulerWorkers[i]->tick();

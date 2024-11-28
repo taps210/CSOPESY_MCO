@@ -10,6 +10,7 @@ public:
     PagingAllocator(size_t maxMemorySize, size_t memPerFrame);
 
     void* allocate(std::shared_ptr<Process> process) override;
+    void* allocateBackingStore(std::shared_ptr<Process> process) override;
     void deallocate(std::shared_ptr<Process> process) override;
     std::string visualizeMemory() override;
 

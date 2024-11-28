@@ -145,8 +145,7 @@ std::string GlobalScheduler::listStats() const {
 std::string GlobalScheduler::listProcesses() const {
     // For debugging only
     int availableCores = scheduler->getAvailableCores();
-    float utilization =  ((workers - availableCores) / workers) * 100;
-    //cout << "CPU Cycles: " << std::to_string(cpuCycles) << "\n";
+    float utilization =  ((static_cast<float>(workers) - static_cast<float>(availableCores)) / static_cast<float>(workers)) * 100;
     
 
     listOfProcess = "";
@@ -154,7 +153,7 @@ std::string GlobalScheduler::listProcesses() const {
         listOfProcess += "No processes found.\n";
         return listOfProcess;
     }
-    listOfProcess += "CPU Utilization: " + std::to_string(static_cast<int>(utilization)) + "%\n";
+    listOfProcess += "CPU Utilization: " + std::to_string(utilization) + "%\n";
     listOfProcess += "Cores used: " + std::to_string(workers - availableCores) + "\n";
     listOfProcess += "Cores available: " + std::to_string(availableCores) + "\n";
     listOfProcess += ("------------------------------------------\n");
