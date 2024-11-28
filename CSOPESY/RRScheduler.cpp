@@ -60,10 +60,10 @@ void RRScheduler::execute() {
 		void* memory = memoryAllocator->allocate(currentProcess);
 		//cout << memoryAllocator->visualizeMemory();
 		//cout << "Memory: " << memory << endl;
+
 		if (memory != nullptr) {
 			//std::cout << "Memory: " << memory << "\n";
 			//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
-			std::shared_ptr<Process> currentProcess = readyQueue.front();
 			currentProcess->setRemainingTime(timeQuantum);
 			readyQueue.pop();
 			worker->update(true);
@@ -72,24 +72,18 @@ void RRScheduler::execute() {
 		}
 		else {
 			//std::cout << "Insufficient memory for process \n";
-			break;
+			while (memory == nullptr) {
+				memory = memoryAllocator->allocate(currentProcess);
+				if (memory != nullptr) {
+					currentProcess->setRemainingTime(timeQuantum);
+					readyQueue.pop();
+					worker->update(true);
+					worker->assignProcess(currentProcess);
+					currentProcess->setMemoryPtr(memory);
+				}
+			}
 		}
 	}
-
-	//void RRScheduler::printBackingStore() {
-	//	std::cout << "Backing Store: \n";
-	//	if (backingStore.empty()) {
-	//		std::cout << "Empty\n";
-	//	}
-	//	else {
-	//		std::queue<std::shared_ptr<Process>> tempQueue = backingStore;
-	//		while (!tempQueue.empty()) {
-	//			auto process = tempQueue.front();
-	//			tempQueue.pop();
-	//			std::cout << "Process Name: " << process->getName() << ", PID: " << process->getPid() << "\n";
-	//		}
-	//	}
-	//}
 
 	// Execute
 	for (int i = 0; i < schedulerWorkers.size(); i++) {

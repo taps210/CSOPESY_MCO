@@ -248,7 +248,7 @@ void GlobalScheduler::run() {
         totalTicks++;
         sleep(100);
         if (ticks == workers) {
-            memoryAllocator->visualizeMemory();
+            //memoryAllocator->visualizeMemory();
             ticks = 0;
             processCounter++;
             execCounter++;

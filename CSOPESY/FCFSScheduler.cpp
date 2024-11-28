@@ -24,6 +24,17 @@ std::shared_ptr<SchedulerWorker> FCFSScheduler::findAvailableWorker() {
 
 void FCFSScheduler::execute() {
 	std::shared_ptr<SchedulerWorker> worker = nullptr;
+
+	for (int i = 0; i < schedulerWorkers.size(); i++) {
+		if (i < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->isFinished()) {
+			std::shared_ptr<Process> process = schedulerWorkers[i]->getProcess();
+			schedulerWorkers[i]->assignProcess(nullptr);
+			schedulerWorkers[i]->update(false);
+			memoryAllocator->deallocate(process);
+			process->setMemoryPtr(nullptr);
+		}
+	}
+
 	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
 		readyQueue.pop();

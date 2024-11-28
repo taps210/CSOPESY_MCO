@@ -68,7 +68,7 @@ public:
 
 
     std::string visualizeMemory() override {
-        std::ostringstream oss;
+        /*std::ostringstream oss;
         oss << "----end---- = " << maximumSize << "\n";
 
         size_t currentAddress = maximumSize;
@@ -84,7 +84,18 @@ public:
         }
 
         oss << "----start---- = 0\n";
-        return oss.str();
+        return oss.str();*/
+        std::cout << "Backing Store: \n";
+        if (backingStore.empty()) {
+            std::cout << "Empty\n";
+        }
+        else {
+            std::vector<std::shared_ptr<Process>> tempQueue = backingStore;
+            for (const auto& processPtr : backingStore) {
+                std::cout << "Process Name: " << processPtr->getName() << ", PID: " << processPtr->getPid() << "\n";
+            }
+        }
+        return "hi";
     }
 
     int getProcessCount() {
