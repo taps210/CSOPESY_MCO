@@ -95,7 +95,7 @@ public:
                 std::cout << "Process Name: " << processPtr->getName() << ", PID: " << processPtr->getPid() << "\n";
             }
         }
-        return "hi";
+        return "";
     }
 
     int getProcessCount() {
