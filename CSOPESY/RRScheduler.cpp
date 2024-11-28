@@ -24,59 +24,83 @@ std::shared_ptr<SchedulerWorker> RRScheduler::findAvailableWorker() {
 }
 
 void RRScheduler::execute() {
-	//cout << memoryAllocator->visualizeMemory();
+    //std::cout << memoryAllocator->visualizeMemory();
 
-	std::shared_ptr<SchedulerWorker> worker = nullptr;
-	// Preempt
-	for (int i = 0; i < schedulerWorkers.size(); i++) {
-		//system("cls");
-		//cout << "i: " << i << endl;
-		//cout << "schedulerWorkers.size()" << schedulerWorkers.size() << endl;
-		//cout << "schedulerWorkers[i]->getProcess()" << schedulerWorkers[i]->getProcess() << endl;
-		////cout << "schedulerWorkers[i]->getProcess()->getRemainingTime()" << schedulerWorkers[i]->getProcess()->getRemainingTime() << endl;
-		//if (schedulerWorkers[i]->getProcess()) {
-		//	cout << "Remaining Time: " << schedulerWorkers[i]->getProcess()->getRemainingTime() << endl;
-		//}
-		//system("cls");
-		if (i < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->isFinished()) {
-			std::shared_ptr<Process> process = schedulerWorkers[i]->getProcess();
-			memoryAllocator->deallocate(process);
-		}
-		else if (i  < schedulerWorkers.size() && schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
-			std::shared_ptr<Process> process = schedulerWorkers[i]->getProcess();
-			readyQueue.push(schedulerWorkers[i]->getProcess());
-			schedulerWorkers[i]->assignProcess(nullptr);
-			schedulerWorkers[i]->update(false);
-			memoryAllocator->deallocate(process);
-			process->setMemoryPtr(nullptr);
-		}
-	}
-	
-	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
-		std::shared_ptr<Process> currentProcess = readyQueue.front();
-		void* memory = memoryAllocator->allocate(currentProcess);
-		//cout << memoryAllocator->visualizeMemory();
-		//cout << "Memory: " << memory << endl;
-		if (memory != nullptr) {
-			//std::cout << "Memory: " << memory << "\n";
-			//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
-			std::shared_ptr<Process> currentProcess = readyQueue.front();
-			currentProcess->setRemainingTime(timeQuantum);
-			readyQueue.pop();
-			worker->update(true);
-			worker->assignProcess(currentProcess);
-			currentProcess->setMemoryPtr(memory);
-		}
-		else {
-			//std::cout << "Insufficient memory for process \n";
-			break;
-		}
-	}
+    std::shared_ptr<SchedulerWorker> worker = nullptr;
 
-	// Execute
-	for (int i = 0; i < schedulerWorkers.size(); i++) {
-		if (i < schedulerWorkers.size()) {
-			schedulerWorkers[i]->tick();
-		}
-	}
+    // Handle deallocation and preemption
+    for (int i = 0; i < schedulerWorkers.size(); i++) {
+        if (schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->isFinished()) {
+            auto process = schedulerWorkers[i]->getProcess();
+            memoryAllocator->deallocate(process);
+        }
+        else if (schedulerWorkers[i]->getProcess() && schedulerWorkers[i]->getProcess()->getRemainingTime() < 1) {
+            auto process = schedulerWorkers[i]->getProcess();
+            readyQueue.push(process);
+            schedulerWorkers[i]->assignProcess(nullptr);
+            schedulerWorkers[i]->update(false);
+            memoryAllocator->deallocate(process);
+            process->setMemoryPtr(nullptr);
+        }
+    }
+
+    // Allocate from readyQueue
+    while (!readyQueue.empty() && (worker = findAvailableWorker())) {
+        auto currentProcess = readyQueue.front();
+        void* memory = memoryAllocator->allocate(currentProcess);
+
+        if (memory != nullptr) {
+            currentProcess->setRemainingTime(timeQuantum);
+            readyQueue.pop();
+            worker->update(true);
+            worker->assignProcess(currentProcess);
+            currentProcess->setMemoryPtr(memory);
+        }
+        else {
+            // Move process to backing store if memory is insufficient
+            backingStore.push(currentProcess);
+            readyQueue.pop();
+            printBackingStore();
+        }
+    }
+
+    // Check and allocate from backing store
+    while (!backingStore.empty() && (worker = findAvailableWorker())) {
+        auto currentProcess = backingStore.front();
+        void* memory = memoryAllocator->allocate(currentProcess);
+
+        if (memory != nullptr) {
+            currentProcess->setRemainingTime(timeQuantum);
+            backingStore.pop();
+            worker->update(true);
+            worker->assignProcess(currentProcess);
+            currentProcess->setMemoryPtr(memory);
+        }
+        else {
+            // Exit early since no more processes can be allocated
+            break;
+        }
+    }
+
+    // Execute workers
+    for (int i = 0; i < schedulerWorkers.size(); i++) {
+        if (i < schedulerWorkers.size()) {
+            schedulerWorkers[i]->tick();
+        }
+    }
+}
+
+void RRScheduler::printBackingStore() {
+    std::cout << "Backing Store: \n";
+    if (backingStore.empty()) {
+        std::cout << "Empty\n";
+    }
+    else {
+        std::queue<std::shared_ptr<Process>> tempQueue = backingStore;
+        while (!tempQueue.empty()) {
+            auto process = tempQueue.front();
+            tempQueue.pop();
+            std::cout << "Process Name: " << process->getName() << ", PID: " << process->getPid() << "\n";
+        }
+    }
 }
