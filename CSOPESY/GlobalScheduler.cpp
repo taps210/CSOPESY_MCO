@@ -113,6 +113,8 @@ std::shared_ptr<Process> GlobalScheduler::createUniqueProcess(std::string proces
     return newProcess;
 }
 
+
+
 // Week 7
 void GlobalScheduler::createProcess() {
     j++;
@@ -120,7 +122,26 @@ void GlobalScheduler::createProcess() {
 }
 
 std::string listOfProcess;
+std::string listOfStats;
+std::string GlobalScheduler::listStats() const {
+    listOfStats = "";
+    listOfStats += "Virtual Memory Statistics:\n";
+    listOfStats += "Total CPUs: " + std::to_string(getCPUCount()) + "\n";
+    listOfStats += "Total Processes: " + std::to_string(getProcessCount()) + "\n";
+    listOfStats += "Current Ticks: " + std::to_string(getCurrentTicks()) + "\n";
 
+    // Add the new statistics to the list
+   /* listOfStats += "Total Memory (KB): " + std::to_string(memoryAllocator->getTotalMemory()) + "\n";
+    listOfStats += "Used Memory (KB): " + std::to_string(memoryAllocator->getUsedMemory()) + "\n";
+    listOfStats += "Free Memory (KB): " + std::to_string(memoryAllocator->getFreeMemory()) + "\n";
+    listOfStats += "Idle CPU Ticks: " + std::to_string(getIdleCpuTicks()) + "\n";
+    listOfStats += "Active CPU Ticks: " + std::to_string(getActiveCpuTicks()) + "\n";
+    listOfStats += "Total CPU Ticks: " + std::to_string(getTotalCpuTicks()) + "\n";
+    listOfStats += "Pages Paged In: " + std::to_string(getPagedIn()) + "\n";
+    listOfStats += "Pages Paged Out: " + std::to_string(getPagedOut()) + "\n";*/
+
+    return listOfStats;
+}
 std::string GlobalScheduler::listProcesses() const {
     // For debugging only
     int availableCores = scheduler->getAvailableCores();

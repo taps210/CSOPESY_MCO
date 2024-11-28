@@ -24,6 +24,8 @@ public:
 	// Week 6
 	void tick();
 
+	std::string listStats() const;
+
 	// Week 7
 	std::string listProcesses() const;
 	void createProcess();
@@ -31,7 +33,18 @@ public:
 	//void logMemory() const;
 	void setTester(bool test);
 	bool getTester();
+public:
+	int getCPUCount() const {
+		return workers;
+	}
 
+	size_t getProcessCount() const {
+		return processes.size();
+	}
+
+	unsigned long int getCurrentTicks() const {
+		return ticks;
+	}
 
 private:
 	GlobalScheduler(int numCpu, std::string schedulerType, unsigned long int quantumCycles,
