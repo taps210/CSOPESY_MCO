@@ -10,27 +10,61 @@ PagingAllocator::PagingAllocator(size_t maxMemorySize, size_t memPerFrame)
     }
 }
 
-void* PagingAllocator::allocate(std::shared_ptr<Process> process) {
-    size_t processId = process->getPid();
-    size_t numFramesNeeded = process->getPagesRequired();
-    if (numFramesNeeded > freeFrameList.size()) {
-        std::cerr << "Memory allocation failed. Not enough free frames.\n";
-        return nullptr;
-    }
-
-    size_t frameIndex = allocateFrames(numFramesNeeded, processId);
-    return reinterpret_cast<void*>(frameIndex);
-}
-
 void* PagingAllocator::allocateBackingStore(std::shared_ptr<Process> process) {
     size_t processId = process->getPid();
     size_t numFramesNeeded = process->getPagesRequired();
+
     if (numFramesNeeded > freeFrameList.size()) {
-        std::cerr << "Memory allocation failed. Not enough free frames.\n";
+        //std::cerr << "Memory allocation failed. Not enough free frames.\n";
         return nullptr;
     }
 
+    // Attempt to allocate frames
     size_t frameIndex = allocateFrames(numFramesNeeded, processId);
+
+    if (frameIndex == SIZE_MAX) {
+        //std::cerr << "Memory allocation failed. Not enough free frames.\n";
+        return nullptr; // No frames available
+    }
+
+    // If frames are not available in memory, handle the page fault
+    // Here we assume a page fault occurs for each frame in the process
+    for (size_t i = 0; i < numFramesNeeded; ++i) {
+        size_t frame = frameIndex + i;
+        if (frameMap.find(frame) == frameMap.end()) {
+            handlePageFault(processId, frame); // Handle page fault
+        }
+    }
+
+    return reinterpret_cast<void*>(frameIndex);
+}
+
+void* PagingAllocator::allocate(std::shared_ptr<Process> process) {
+    size_t processId = process->getPid();
+    size_t numFramesNeeded = process->getPagesRequired();
+
+    if (numFramesNeeded > freeFrameList.size()) {
+        //std::cerr << "Memory allocation failed. Not enough free frames.\n";
+        return nullptr;
+    }
+
+    // Attempt to allocate frames
+    size_t frameIndex = allocateFrames(numFramesNeeded, processId);
+
+    if (frameIndex == SIZE_MAX) {
+        //std::cerr << "Memory allocation failed. Not enough free frames.\n";
+        return nullptr; // No frames available
+    }
+
+    // If frames are not available in memory, handle the page fault
+    // Here we assume a page fault occurs for each frame in the process
+    for (size_t i = 0; i < numFramesNeeded; ++i) {
+        size_t frame = frameIndex + i;
+        if (frameMap.find(frame) == frameMap.end()) {
+            handlePageFault(processId, frame); // Handle page fault
+        }
+    }
+
     return reinterpret_cast<void*>(frameIndex);
 }
 
@@ -41,12 +75,41 @@ void PagingAllocator::deallocate(std::shared_ptr<Process> process) {
     for (auto it = frameMap.begin(); it != frameMap.end();) {
         if (it->second == processId) {
             size_t frameIndex = it->first;
-            it = frameMap.erase(it);
-            freeFrameList.push_back(frameIndex);
+
+            // Handle page fault (if necessary) before deallocation
+            if (frameIndex == SIZE_MAX) {
+                //std::cerr << "Page fault: Page is not in memory, needs to be loaded before deallocation.\n";
+                handlePageFault(processId, frameIndex); // Handle page fault
+            }
+
+            it = frameMap.erase(it);  // Deallocate frame
+            freeFrameList.push_back(frameIndex);  // Add to free list
         }
         else {
             ++it;
         }
+    }
+}
+
+void PagingAllocator::handlePageFault(size_t processId, size_t frameId) {
+    //std::cout << "Handling page fault for Process " << processId << ", Frame " << frameId << "\n";
+
+    // Check if the page is in the backing store
+    auto it = backingStore.find(processId);
+    if (it != backingStore.end() && it->second.size() > frameId) {
+        // Simulate loading the page from the backing store
+        std::vector<char> page = it->second[frameId];
+
+        // Allocate a new frame for the page fault
+        size_t allocatedFrame = freeFrameList.back();
+        freeFrameList.pop_back();
+        frameMap[allocatedFrame] = processId;
+
+        // Store the page in the allocated frame
+        //std::cout << "Loaded page from backing store into Frame " << allocatedFrame << "\n";
+    }
+    else {
+        //std::cerr << "Page not found in backing store.\n";
     }
 }
 

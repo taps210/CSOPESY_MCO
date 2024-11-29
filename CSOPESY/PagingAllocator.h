@@ -20,6 +20,9 @@ private:
     std::unordered_map<size_t, size_t> frameMap; // frameIndex -> processId
     std::vector<size_t> freeFrameList;
 
+    std::unordered_map<size_t, std::vector<std::vector<char>>> backingStore;
+
     size_t allocateFrames(size_t numFrames, size_t processId);
     void deallocateFrames(size_t numFrames, size_t frameIndex);
+    void handlePageFault(size_t processId, size_t pageIndex);
 };
