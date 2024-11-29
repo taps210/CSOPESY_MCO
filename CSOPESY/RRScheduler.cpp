@@ -54,10 +54,11 @@ void RRScheduler::execute() {
 			process->setMemoryPtr(nullptr);
 		}
 	}
-	
-	while (!readyQueue.empty() && (worker = findAvailableWorker())) {
+
+	if (!readyQueue.empty()) {
 		std::shared_ptr<Process> currentProcess = readyQueue.front();
-		void* memory = memoryAllocator->allocate(currentProcess);
+		void* memory = memoryAllocator->allocateBackingStore(currentProcess);
+		int i = 0;
 		//cout << memoryAllocator->visualizeMemory();
 		//cout << "Memory: " << memory << endl;
 
@@ -66,6 +67,7 @@ void RRScheduler::execute() {
 			//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
 			currentProcess->setRemainingTime(timeQuantum);
 			readyQueue.pop();
+			worker = findAvailableWorker();
 			worker->update(true);
 			worker->assignProcess(currentProcess);
 			currentProcess->setMemoryPtr(memory);
@@ -73,10 +75,15 @@ void RRScheduler::execute() {
 		else {
 			//std::cout << "Insufficient memory for process \n";
 			while (memory == nullptr) {
-				memory = memoryAllocator->allocate(currentProcess);
+				readyQueue.push(schedulerWorkers[i]->getProcess());
+				schedulerWorkers[i]->assignProcess(nullptr);
+				schedulerWorkers[i]->update(false);
+				i++;
+				memory = memoryAllocator->allocateBackingStore(currentProcess);
 				if (memory != nullptr) {
 					currentProcess->setRemainingTime(timeQuantum);
 					readyQueue.pop();
+					worker = findAvailableWorker();
 					worker->update(true);
 					worker->assignProcess(currentProcess);
 					currentProcess->setMemoryPtr(memory);
@@ -84,6 +91,36 @@ void RRScheduler::execute() {
 			}
 		}
 	}
+	
+	//while (!readyQueue.empty() && (worker = findAvailableWorker())) {
+	//	std::shared_ptr<Process> currentProcess = readyQueue.front();
+	//	void* memory = memoryAllocator->allocateBackingStore(currentProcess);
+	//	//cout << memoryAllocator->visualizeMemory();
+	//	//cout << "Memory: " << memory << endl;
+
+	//	if (memory != nullptr) {
+	//		//std::cout << "Memory: " << memory << "\n";
+	//		//std::cout << "Has enough memory. Adding process:" << currentProcess->getName() << "\n";
+	//		currentProcess->setRemainingTime(timeQuantum);
+	//		readyQueue.pop();
+	//		worker->update(true);
+	//		worker->assignProcess(currentProcess);
+	//		currentProcess->setMemoryPtr(memory);
+	//	}
+	//	else {
+	//		//std::cout << "Insufficient memory for process \n";
+	//		while (memory == nullptr) {
+	//			memory = memoryAllocator->allocateBackingStore(currentProcess);
+	//			if (memory != nullptr) {
+	//				currentProcess->setRemainingTime(timeQuantum);
+	//				readyQueue.pop();
+	//				worker->update(true);
+	//				worker->assignProcess(currentProcess);
+	//				currentProcess->setMemoryPtr(memory);
+	//			}
+	//		}
+	//	}
+	//}
 
 	// Execute
 	for (int i = 0; i < schedulerWorkers.size(); i++) {

@@ -22,6 +22,18 @@ void* PagingAllocator::allocate(std::shared_ptr<Process> process) {
     return reinterpret_cast<void*>(frameIndex);
 }
 
+void* PagingAllocator::allocateBackingStore(std::shared_ptr<Process> process) {
+    size_t processId = process->getPid();
+    size_t numFramesNeeded = process->getPagesRequired();
+    if (numFramesNeeded > freeFrameList.size()) {
+        std::cerr << "Memory allocation failed. Not enough free frames.\n";
+        return nullptr;
+    }
+
+    size_t frameIndex = allocateFrames(numFramesNeeded, processId);
+    return reinterpret_cast<void*>(frameIndex);
+}
+
 void PagingAllocator::deallocate(std::shared_ptr<Process> process) {
     size_t processId = process->getPid();
 
