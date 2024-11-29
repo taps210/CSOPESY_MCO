@@ -120,6 +120,19 @@ void GlobalScheduler::createProcess() {
 }
 
 std::string listOfProcess;
+std::string listOfStats;
+std::string GlobalScheduler::listStats() const {
+    listOfStats += "Total Memory (KB): " + std::to_string(totalMem) + "\n";
+    listOfStats += "Used Memory (KB): " + std::to_string(usedMem) + "\n";
+    listOfStats += "Free Memory (KB): " + std::to_string(freeMem) + "\n";
+    listOfStats += "Idle CPU Ticks: " + std::to_string(idleTick) + "\n";
+    listOfStats += "Active CPU Ticks: " + std::to_string(activeTick) + "\n";
+    listOfStats += "Total CPU Ticks: " + std::to_string(totalTicks) + "\n";
+    listOfStats += "Pages Paged In: " + std::to_string(pagesIn) + "\n";
+    listOfStats += "Pages Paged Out: " + std::to_string(pagesOut) + "\n";
+
+    return listOfStats;
+}
 
 std::string GlobalScheduler::listProcesses() const {
     // For debugging only

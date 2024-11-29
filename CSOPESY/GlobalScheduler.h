@@ -24,6 +24,8 @@ public:
 	// Week 6
 	void tick();
 
+	std::string listStats() const;
+
 	// Week 7
 	std::string listProcesses() const;
 	void createProcess();
@@ -51,6 +53,14 @@ private:
 	unsigned long int maxCom = 0;
 	bool tester = false;
 	int workers;
+	int totalTicks;
+	int usedMem;
+	int totalMem;
+	int freeMem;
+	int idleTick;
+	int activeTick;
+	int pagesIn;
+	int pagesOut;
 	unsigned long int processFreq;
 	unsigned long int execDelay;
 	unsigned long int timeQuantum;
