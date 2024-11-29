@@ -122,21 +122,14 @@ void GlobalScheduler::createProcess() {
 std::string listOfProcess;
 std::string listOfStats;
 std::string GlobalScheduler::listStats() const {
-    listOfStats = "";
-    listOfStats += "Virtual Memory Statistics:\n";
-    listOfStats += "Total CPUs: " + std::to_string(getCPUCount()) + "\n";
-    listOfStats += "Total Processes: " + std::to_string(getProcessCount()) + "\n";
-    listOfStats += "Current Ticks: " + std::to_string(getCurrentTicks()) + "\n";
-
-    // Add the new statistics to the list
-    listOfStats += "Total Memory (KB): " + std::to_string(1024) + "\n"; 
-    listOfStats += "Used Memory (KB): " + std::to_string(768) + "\n";   
-    listOfStats += "Free Memory (KB): " + std::to_string(256) + "\n";  
-    listOfStats += "Idle CPU Ticks: " + std::to_string(150) + "\n";    
-    listOfStats += "Active CPU Ticks: " + std::to_string(850) + "\n";  
+    listOfStats += "Total Memory (KB): " + std::to_string(totalMem) + "\n"; 
+    listOfStats += "Used Memory (KB): " + std::to_string(usedMem) + "\n";   
+    listOfStats += "Free Memory (KB): " + std::to_string(freeMem) + "\n";  
+    listOfStats += "Idle CPU Ticks: " + std::to_string(idleTick) + "\n";    
+    listOfStats += "Active CPU Ticks: " + std::to_string(activeTick) + "\n";  
     listOfStats += "Total CPU Ticks: " + std::to_string(totalTicks) + "\n";
-    listOfStats += "Pages Paged In: " + std::to_string(30) + "\n";  
-    listOfStats += "Pages Paged Out: " + std::to_string(15) + "\n"; 
+    listOfStats += "Pages Paged In: " + std::to_string(pagesIn) + "\n";  
+    listOfStats += "Pages Paged Out: " + std::to_string(pagesOut) + "\n"; 
 
     return listOfStats;
 }

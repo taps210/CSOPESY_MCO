@@ -65,6 +65,13 @@ private:
 	bool tester = false;
 	int workers;
 	int totalTicks;
+	int usedMem;
+	int totalMem;
+	int freeMem;
+	int idleTick;
+	int activeTick;
+	int pagesIn;
+	int pagesOut;
 	unsigned long int processFreq;
 	unsigned long int execDelay;
 	unsigned long int timeQuantum;
